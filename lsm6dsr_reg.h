@@ -2327,7 +2327,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_18_t;
 
-    #define LSM6DSR_MASTER_CONFIG 0x14U
+#define LSM6DSR_MASTER_CONFIG 0x14U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 aux_sens_on : 2;

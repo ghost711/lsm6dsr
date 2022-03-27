@@ -8379,24 +8379,19 @@ i32 lsm6dsr_sh_slave_connected_get(stmdev_ctx_t *ctx, lsm6dsr_aux_sens_on_t *val
  *
  */
 i32 lsm6dsr_sh_master_set(stmdev_ctx_t *ctx, u8 val) {
-    lsm6dsr_master_config_t master_config;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
-
+    lsm6dsr_master_config_t mCfg;
+    i32                     ret; 
+    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK); 
     if (ret == 0) {
-        ret = lsm6dsr_read_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&master_config, 1);
-    }
-
+        ret = lsm6dsr_read_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&mCfg, 1);
+    } 
     if (ret == 0) {
-        master_config.master_on = (u8)val;
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&master_config, 1);
-    }
-
+        mCfg.master_on = (u8)val;
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&mCfg, 1);
+    } 
     if (ret == 0) {
         ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_USER_BANK);
-    }
-
+    } 
     return ret;
 }
 
