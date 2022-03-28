@@ -140,7 +140,7 @@ i32 lsm6dsr_xl_full_scale_set(stmdev_ctx_t *ctx, lsm6dsr_fs_xl_t val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL1_XL, (u8 *)&ctrl1_xl, 1);
     if (ret == 0) {
         ctrl1_xl.fs_xl = (u8)val;
-        ret            = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL1_XL, (u8 *)&ctrl1_xl, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL1_XL, (u8 *)&ctrl1_xl, 1);
     }
     return ret;
 }
@@ -176,95 +176,62 @@ i32 lsm6dsr_xl_full_scale_get(stmdev_ctx_t *ctx, lsm6dsr_fs_xl_t *val) {
  */
 i32 lsm6dsr_xl_data_rate_set(stmdev_ctx_t *ctx, lsm6dsr_odr_xl_t val) {
     lsm6dsr_odr_xl_t         odr_xl = val;
-    lsm6dsr_emb_fsm_enable_t fsm_enable;
-    lsm6dsr_fsm_odr_t        fsm_odr;
-    lsm6dsr_ctrl1_xl_t       ctrl1_xl;
-    i32                  ret;
-
+    lsm6dsr_emb_fsm_enable_t fsmEnbl;
+    lsm6dsr_fsm_odr_t        fsmOdr;
+    lsm6dsr_ctrl1_xl_t       ctrl1_xl; 
     /* Check the Finite State Machine data rate constraints */
-    ret = lsm6dsr_fsm_enable_get(ctx, &fsm_enable);
+    i32 ret = lsm6dsr_fsm_enable_get(ctx, &fsmEnbl);
     if (ret == 0) {
-        if ((fsm_enable.fsm_enable_a.fsm1_en | fsm_enable.fsm_enable_a.fsm2_en |
-             fsm_enable.fsm_enable_a.fsm3_en | fsm_enable.fsm_enable_a.fsm4_en |
-             fsm_enable.fsm_enable_a.fsm5_en | fsm_enable.fsm_enable_a.fsm6_en |
-             fsm_enable.fsm_enable_a.fsm7_en | fsm_enable.fsm_enable_a.fsm8_en |
-             fsm_enable.fsm_enable_b.fsm9_en | fsm_enable.fsm_enable_b.fsm10_en |
-             fsm_enable.fsm_enable_b.fsm11_en | fsm_enable.fsm_enable_b.fsm12_en |
-             fsm_enable.fsm_enable_b.fsm13_en | fsm_enable.fsm_enable_b.fsm14_en |
-             fsm_enable.fsm_enable_b.fsm15_en | fsm_enable.fsm_enable_b.fsm16_en) ==
-            PROPERTY_ENABLE) {
-            ret = lsm6dsr_fsm_data_rate_get(ctx, &fsm_odr);
-
+        lsm6dsr_fsm_enable_a_t feA = fsmEnbl.fsm_enable_a;
+        lsm6dsr_fsm_enable_b_t feB = fsmEnbl.fsm_enable_b;
+        if( (feA.fsm1_en | feA.fsm2_en | feA.fsm3_en | feA.fsm4_en |
+             feA.fsm5_en | feA.fsm6_en | feA.fsm7_en | feA.fsm8_en |
+             feB.fsm9_en  | feB.fsm10_en | feB.fsm11_en | feB.fsm12_en |
+             feB.fsm13_en | feB.fsm14_en | feB.fsm15_en | feB.fsm16_en) ==
+                                                             PROPERTY_ENABLE ) {
+            ret = lsm6dsr_fsm_data_rate_get(ctx, &fsmOdr);
             if (ret == 0) {
-                switch (fsm_odr) {
+                switch (fsmOdr) {
                 case LSM6DSR_ODR_FSM_12Hz5:
                     if (val == LSM6DSR_XL_ODR_OFF) {
                         odr_xl = LSM6DSR_XL_ODR_12Hz5;
-                    }
-
-                    else {
+                    } else {
                         odr_xl = val;
                     }
-
                     break;
-
                 case LSM6DSR_ODR_FSM_26Hz:
                     if (val == LSM6DSR_XL_ODR_OFF) {
                         odr_xl = LSM6DSR_XL_ODR_26Hz;
-                    }
-
-                    else if (val == LSM6DSR_XL_ODR_12Hz5) {
+                    } else if (val == LSM6DSR_XL_ODR_12Hz5) {
                         odr_xl = LSM6DSR_XL_ODR_26Hz;
-                    }
-
-                    else {
+                    } else {
                         odr_xl = val;
                     }
-
                     break;
-
                 case LSM6DSR_ODR_FSM_52Hz:
                     if (val == LSM6DSR_XL_ODR_OFF) {
                         odr_xl = LSM6DSR_XL_ODR_52Hz;
-                    }
-
-                    else if (val == LSM6DSR_XL_ODR_12Hz5) {
+                    } else if (val == LSM6DSR_XL_ODR_12Hz5) {
                         odr_xl = LSM6DSR_XL_ODR_52Hz;
-                    }
-
-                    else if (val == LSM6DSR_XL_ODR_26Hz) {
+                    } else if (val == LSM6DSR_XL_ODR_26Hz) {
                         odr_xl = LSM6DSR_XL_ODR_52Hz;
-                    }
-
-                    else {
+                    } else {
                         odr_xl = val;
                     }
-
                     break;
-
                 case LSM6DSR_ODR_FSM_104Hz:
                     if (val == LSM6DSR_XL_ODR_OFF) {
                         odr_xl = LSM6DSR_XL_ODR_104Hz;
-                    }
-
-                    else if (val == LSM6DSR_XL_ODR_12Hz5) {
+                    } else if (val == LSM6DSR_XL_ODR_12Hz5) {
                         odr_xl = LSM6DSR_XL_ODR_104Hz;
-                    }
-
-                    else if (val == LSM6DSR_XL_ODR_26Hz) {
+                    } else if (val == LSM6DSR_XL_ODR_26Hz) {
                         odr_xl = LSM6DSR_XL_ODR_104Hz;
-                    }
-
-                    else if (val == LSM6DSR_XL_ODR_52Hz) {
+                    } else if (val == LSM6DSR_XL_ODR_52Hz) {
                         odr_xl = LSM6DSR_XL_ODR_104Hz;
-                    }
-
-                    else {
+                    } else {
                         odr_xl = val;
                     }
-
                     break;
-
                 default: odr_xl = val; break;
                 }
             }
@@ -275,7 +242,7 @@ i32 lsm6dsr_xl_data_rate_set(stmdev_ctx_t *ctx, lsm6dsr_odr_xl_t val) {
     }
     if (ret == 0) {
         ctrl1_xl.odr_xl = (u8)odr_xl;
-        ret             = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL1_XL, (u8 *)&ctrl1_xl, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL1_XL, (u8 *)&ctrl1_xl, 1);
     }
     return ret;
 }
@@ -322,7 +289,7 @@ i32 lsm6dsr_gy_full_scale_set(stmdev_ctx_t *ctx, lsm6dsr_fs_g_t val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL2_G, (u8 *)&ctrl2_g, 1);
     if (ret == 0) {
         ctrl2_g.fs_g = (u8)val;
-        ret          = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL2_G, (u8 *)&ctrl2_g, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL2_G, (u8 *)&ctrl2_g, 1);
     }
     return ret;
 }
@@ -339,14 +306,13 @@ i32 lsm6dsr_gy_full_scale_get(stmdev_ctx_t *ctx, lsm6dsr_fs_g_t *val) {
     lsm6dsr_ctrl2_g_t ctrl2_g;
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL2_G, (u8 *)&ctrl2_g, 1);
     switch (ctrl2_g.fs_g) {
-    case LSM6DSR_125dps: *val = LSM6DSR_125dps; break;
-    case LSM6DSR_250dps: *val = LSM6DSR_250dps; break;
-    case LSM6DSR_500dps: *val = LSM6DSR_500dps; break;
+    case LSM6DSR_125dps:  *val = LSM6DSR_125dps;  break;
+    case LSM6DSR_250dps:  *val = LSM6DSR_250dps;  break;
+    case LSM6DSR_500dps:  *val = LSM6DSR_500dps;  break;
     case LSM6DSR_1000dps: *val = LSM6DSR_1000dps; break;
     case LSM6DSR_2000dps: *val = LSM6DSR_2000dps; break;
     case LSM6DSR_4000dps: *val = LSM6DSR_4000dps; break;
-    default: *val = LSM6DSR_125dps; break;
-    }
+    default:              *val = LSM6DSR_125dps;  break; }
     return ret;
 }
 
@@ -360,95 +326,62 @@ i32 lsm6dsr_gy_full_scale_get(stmdev_ctx_t *ctx, lsm6dsr_fs_g_t *val) {
  */
 i32 lsm6dsr_gy_data_rate_set(stmdev_ctx_t *ctx, lsm6dsr_odr_g_t val) {
     lsm6dsr_odr_g_t          odr_gy = val;
-    lsm6dsr_emb_fsm_enable_t fsm_enable;
-    lsm6dsr_fsm_odr_t        fsm_odr;
-    lsm6dsr_ctrl2_g_t        ctrl2_g;
-    i32                  ret;
-
+    lsm6dsr_emb_fsm_enable_t fsmEnbl;
+    lsm6dsr_fsm_odr_t        fsmOdr;
+    lsm6dsr_ctrl2_g_t        ctrl2_g; 
     /* Check the Finite State Machine data rate constraints */
-    ret = lsm6dsr_fsm_enable_get(ctx, &fsm_enable);
+    i32 ret = lsm6dsr_fsm_enable_get(ctx, &fsmEnbl);
     if (ret == 0) {
-        if ((fsm_enable.fsm_enable_a.fsm1_en | fsm_enable.fsm_enable_a.fsm2_en |
-             fsm_enable.fsm_enable_a.fsm3_en | fsm_enable.fsm_enable_a.fsm4_en |
-             fsm_enable.fsm_enable_a.fsm5_en | fsm_enable.fsm_enable_a.fsm6_en |
-             fsm_enable.fsm_enable_a.fsm7_en | fsm_enable.fsm_enable_a.fsm8_en |
-             fsm_enable.fsm_enable_b.fsm9_en | fsm_enable.fsm_enable_b.fsm10_en |
-             fsm_enable.fsm_enable_b.fsm11_en | fsm_enable.fsm_enable_b.fsm12_en |
-             fsm_enable.fsm_enable_b.fsm13_en | fsm_enable.fsm_enable_b.fsm14_en |
-             fsm_enable.fsm_enable_b.fsm15_en | fsm_enable.fsm_enable_b.fsm16_en) ==
-            PROPERTY_ENABLE) {
-            ret = lsm6dsr_fsm_data_rate_get(ctx, &fsm_odr);
-
+        lsm6dsr_fsm_enable_a_t feA = fsmEnbl.fsm_enable_a;
+        lsm6dsr_fsm_enable_b_t feB = fsmEnbl.fsm_enable_b; 
+        if( (feA.fsm1_en | feA.fsm2_en | feA.fsm3_en | feA.fsm4_en |
+             feA.fsm5_en | feA.fsm6_en | feA.fsm7_en | feA.fsm8_en |
+             feB.fsm9_en  | feB.fsm10_en | feB.fsm11_en | feB.fsm12_en |
+             feB.fsm13_en | feB.fsm14_en | feB.fsm15_en | feB.fsm16_en) == 
+                                                             PROPERTY_ENABLE ) {
+            ret = lsm6dsr_fsm_data_rate_get(ctx, &fsmOdr);
             if (ret == 0) {
-                switch (fsm_odr) {
+                switch (fsmOdr) {
                 case LSM6DSR_ODR_FSM_12Hz5:
                     if (val == LSM6DSR_GY_ODR_OFF) {
                         odr_gy = LSM6DSR_GY_ODR_12Hz5;
-                    }
-
-                    else {
+                    } else {
                         odr_gy = val;
                     }
-
                     break;
-
                 case LSM6DSR_ODR_FSM_26Hz:
                     if (val == LSM6DSR_GY_ODR_OFF) {
                         odr_gy = LSM6DSR_GY_ODR_26Hz;
-                    }
-
-                    else if (val == LSM6DSR_GY_ODR_12Hz5) {
+                    } else if (val == LSM6DSR_GY_ODR_12Hz5) {
                         odr_gy = LSM6DSR_GY_ODR_26Hz;
-                    }
-
-                    else {
+                    } else {
                         odr_gy = val;
                     }
-
                     break;
-
                 case LSM6DSR_ODR_FSM_52Hz:
                     if (val == LSM6DSR_GY_ODR_OFF) {
                         odr_gy = LSM6DSR_GY_ODR_52Hz;
-                    }
-
-                    else if (val == LSM6DSR_GY_ODR_12Hz5) {
+                    } else if (val == LSM6DSR_GY_ODR_12Hz5) {
                         odr_gy = LSM6DSR_GY_ODR_52Hz;
-                    }
-
-                    else if (val == LSM6DSR_GY_ODR_26Hz) {
+                    } else if (val == LSM6DSR_GY_ODR_26Hz) {
                         odr_gy = LSM6DSR_GY_ODR_52Hz;
-                    }
-
-                    else {
+                    } else {
                         odr_gy = val;
                     }
-
                     break;
-
                 case LSM6DSR_ODR_FSM_104Hz:
                     if (val == LSM6DSR_GY_ODR_OFF) {
                         odr_gy = LSM6DSR_GY_ODR_104Hz;
-                    }
-
-                    else if (val == LSM6DSR_GY_ODR_12Hz5) {
+                    } else if (val == LSM6DSR_GY_ODR_12Hz5) {
                         odr_gy = LSM6DSR_GY_ODR_104Hz;
-                    }
-
-                    else if (val == LSM6DSR_GY_ODR_26Hz) {
+                    } else if (val == LSM6DSR_GY_ODR_26Hz) {
                         odr_gy = LSM6DSR_GY_ODR_104Hz;
-                    }
-
-                    else if (val == LSM6DSR_GY_ODR_52Hz) {
+                    } else if (val == LSM6DSR_GY_ODR_52Hz) {
                         odr_gy = LSM6DSR_GY_ODR_104Hz;
-                    }
-
-                    else {
+                    } else {
                         odr_gy = val;
                     }
-
                     break;
-
                 default: odr_gy = val; break;
                 }
             }
@@ -505,7 +438,7 @@ i32 lsm6dsr_block_data_update_set(stmdev_ctx_t *ctx, u8 val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL3_C, (u8 *)&ctrl3_c, 1);
     if (ret == 0) {
         ctrl3_c.bdu = (u8)val;
-        ret         = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL3_C, (u8 *)&ctrl3_c, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL3_C, (u8 *)&ctrl3_c, 1);
     }
     return ret;
 }
@@ -704,9 +637,7 @@ i32 lsm6dsr_status_reg_get(stmdev_ctx_t *ctx, lsm6dsr_status_reg_t *val) {
  */
 i32 lsm6dsr_xl_flag_data_ready_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_status_reg_t status_reg;
-    i32              ret;
-
-    ret  = lsm6dsr_read_reg(ctx, LSM6DSR_STATUS_REG, (u8 *)&status_reg, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_STATUS_REG, (u8 *)&status_reg, 1);
     *val = status_reg.xlda;
     return ret;
 }
@@ -721,9 +652,7 @@ i32 lsm6dsr_xl_flag_data_ready_get(stmdev_ctx_t *ctx, u8 *val) {
  */
 i32 lsm6dsr_gy_flag_data_ready_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_status_reg_t status_reg;
-    i32              ret;
-
-    ret  = lsm6dsr_read_reg(ctx, LSM6DSR_STATUS_REG, (u8 *)&status_reg, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_STATUS_REG, (u8 *)&status_reg, 1);
     *val = status_reg.gda;
     return ret;
 }
@@ -738,9 +667,7 @@ i32 lsm6dsr_gy_flag_data_ready_get(stmdev_ctx_t *ctx, u8 *val) {
  */
 i32 lsm6dsr_temp_flag_data_ready_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_status_reg_t status_reg;
-    i32              ret;
-
-    ret  = lsm6dsr_read_reg(ctx, LSM6DSR_STATUS_REG, (u8 *)&status_reg, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_STATUS_REG, (u8 *)&status_reg, 1);
     *val = status_reg.tda;
     return ret;
 }
@@ -1108,9 +1035,7 @@ i32 lsm6dsr_number_of_steps_get(stmdev_ctx_t *ctx, u16 *val) {
  */
 i32 lsm6dsr_steps_reset(stmdev_ctx_t *ctx) {
     lsm6dsr_emb_func_src_t emb_func_src;
-    i32                ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_SRC, (u8 *)&emb_func_src, 1);
     }
@@ -1148,9 +1073,7 @@ i32 lsm6dsr_steps_reset(stmdev_ctx_t *ctx) {
  */
 i32 lsm6dsr_odr_cal_reg_set(stmdev_ctx_t *ctx, u8 val) {
     lsm6dsr_internal_freq_fine_t internal_freq_fine;
-    i32                      ret;
-
-    ret = lsm6dsr_read_reg(ctx, LSM6DSR_INTERNAL_FREQ_FINE, (u8 *)&internal_freq_fine, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_INTERNAL_FREQ_FINE, (u8 *)&internal_freq_fine, 1);
     if (ret == 0) {
         internal_freq_fine.freq_fine = (u8)val;
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_INTERNAL_FREQ_FINE, (u8 *)&internal_freq_fine, 1);
@@ -1188,9 +1111,7 @@ i32 lsm6dsr_odr_cal_reg_get(stmdev_ctx_t *ctx, u8 *val) {
  */
 i32 lsm6dsr_mem_bank_set(stmdev_ctx_t *ctx, lsm6dsr_reg_access_t val) {
     lsm6dsr_func_cfg_access_t func_cfg_access;
-    i32                   ret;
-
-    ret = lsm6dsr_read_reg(ctx, LSM6DSR_FUNC_CFG_ACCESS, (u8 *)&func_cfg_access, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_FUNC_CFG_ACCESS, (u8 *)&func_cfg_access, 1);
     if (ret == 0) {
         func_cfg_access.reg_access = (u8)val;
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_FUNC_CFG_ACCESS, (u8 *)&func_cfg_access, 1);
@@ -1209,9 +1130,7 @@ i32 lsm6dsr_mem_bank_set(stmdev_ctx_t *ctx, lsm6dsr_reg_access_t val) {
  */
 i32 lsm6dsr_mem_bank_get(stmdev_ctx_t *ctx, lsm6dsr_reg_access_t *val) {
     lsm6dsr_func_cfg_access_t func_cfg_access;
-    i32                   ret;
-
-    ret = lsm6dsr_read_reg(ctx, LSM6DSR_FUNC_CFG_ACCESS, (u8 *)&func_cfg_access, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_FUNC_CFG_ACCESS, (u8 *)&func_cfg_access, 1);
     switch (func_cfg_access.reg_access) {
     case LSM6DSR_USER_BANK:          *val = LSM6DSR_USER_BANK; break; 
     case LSM6DSR_SENSOR_HUB_BANK:    *val = LSM6DSR_SENSOR_HUB_BANK; break; 
@@ -1234,15 +1153,13 @@ i32 lsm6dsr_ln_pg_write_byte(stmdev_ctx_t *ctx, u16 add, u8 *val) {
     lsm6dsr_page_rw_t      page_rw;
     lsm6dsr_page_sel_t     page_sel;
     lsm6dsr_page_address_t page_address;
-    i32                ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
     }
     if (ret == 0) {
         page_rw.page_rw = 0x02U; /* page_write enable */
-        ret             = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
     }
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_PAGE_SEL, (u8 *)&page_sel, 1);
@@ -1250,7 +1167,7 @@ i32 lsm6dsr_ln_pg_write_byte(stmdev_ctx_t *ctx, u16 add, u8 *val) {
     if (ret == 0) {
         page_sel.page_sel    = (u8)((add >> 8) & 0x0FU);
         page_sel.not_used_01 = 1;
-        ret                  = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_SEL, (u8 *)&page_sel, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_SEL, (u8 *)&page_sel, 1);
     }
     if (ret == 0) {
         page_address.page_addr = (u8)(add & 0xFFU);
@@ -1264,7 +1181,7 @@ i32 lsm6dsr_ln_pg_write_byte(stmdev_ctx_t *ctx, u16 add, u8 *val) {
     }
     if (ret == 0) {
         page_rw.page_rw = 0x00; /* page_write disable */
-        ret             = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
     }
     if (ret == 0) {
         ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_USER_BANK);
@@ -1285,20 +1202,16 @@ i32 lsm6dsr_ln_pg_write_byte(stmdev_ctx_t *ctx, u16 add, u8 *val) {
 i32 lsm6dsr_ln_pg_write(stmdev_ctx_t *ctx, u16 add, u8 *buf, u8 len) {
     lsm6dsr_page_rw_t      page_rw;
     lsm6dsr_page_sel_t     page_sel;
-    lsm6dsr_page_address_t page_address;
-    i32                ret;
-
-    u8 msb, lsb;
-    u8 i;
-    msb = (u8)((add >> 8) & 0x0FU);
-    lsb = (u8)(add & 0xFFU);
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    lsm6dsr_page_address_t page_address;   
+    u8 msb = (u8)((add >> 8) & 0x0FU);
+    u8 lsb = (u8)(add & 0xFFU);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
     }
     if (ret == 0) {
         page_rw.page_rw = 0x02U; /* page_write enable*/
-        ret             = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
     }
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_PAGE_SEL, (u8 *)&page_sel, 1);
@@ -1306,27 +1219,23 @@ i32 lsm6dsr_ln_pg_write(stmdev_ctx_t *ctx, u16 add, u8 *buf, u8 len) {
     if (ret == 0) {
         page_sel.page_sel    = msb;
         page_sel.not_used_01 = 1;
-        ret                  = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_SEL, (u8 *)&page_sel, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_SEL, (u8 *)&page_sel, 1);
     }
     if (ret == 0) {
         page_address.page_addr = lsb;
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_ADDRESS, (u8 *)&page_address, 1);
-    }
-
-    for (i = 0; i < len; i++) {
+    } 
+    for (u8 i = 0; i < len; i++) {
         if (ret == 0) {
-            ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_VALUE, &buf[i], 1);
-
+            ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_VALUE, &buf[i], 1); 
             if (ret == 0) {
                 /* Check if page wrap */
                 if (lsb == 0x00U) {
                     msb++;
                     ret = lsm6dsr_read_reg(ctx, LSM6DSR_PAGE_SEL, (u8 *)&page_sel, 1);
-                }
-
+                } 
                 lsb++;
-            }
-
+            } 
             if (ret == 0) {
                 page_sel.page_sel    = msb;
                 page_sel.not_used_01 = 1;
@@ -1337,14 +1246,14 @@ i32 lsm6dsr_ln_pg_write(stmdev_ctx_t *ctx, u16 add, u8 *buf, u8 len) {
     if (ret == 0) {
         page_sel.page_sel    = 0;
         page_sel.not_used_01 = 1;
-        ret                  = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_SEL, (u8 *)&page_sel, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_SEL, (u8 *)&page_sel, 1);
     }
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
     }
     if (ret == 0) {
         page_rw.page_rw = 0x00U; /* page_write disable */
-        ret             = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
     }
     if (ret == 0) {
         ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_USER_BANK);
@@ -1365,15 +1274,13 @@ i32 lsm6dsr_ln_pg_read_byte(stmdev_ctx_t *ctx, u16 add, u8 *val) {
     lsm6dsr_page_rw_t      page_rw;
     lsm6dsr_page_sel_t     page_sel;
     lsm6dsr_page_address_t page_address;
-    i32                ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
     }
     if (ret == 0) {
         page_rw.page_rw = 0x01U; /* page_read enable*/
-        ret             = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
     }
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_PAGE_SEL, (u8 *)&page_sel, 1);
@@ -1381,7 +1288,7 @@ i32 lsm6dsr_ln_pg_read_byte(stmdev_ctx_t *ctx, u16 add, u8 *val) {
     if (ret == 0) {
         page_sel.page_sel    = (u8)((add >> 8) & 0x0FU);
         page_sel.not_used_01 = 1;
-        ret                  = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_SEL, (u8 *)&page_sel, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_SEL, (u8 *)&page_sel, 1);
     }
     if (ret == 0) {
         page_address.page_addr = (u8)(add & 0x00FFU);
@@ -1395,7 +1302,7 @@ i32 lsm6dsr_ln_pg_read_byte(stmdev_ctx_t *ctx, u16 add, u8 *val) {
     }
     if (ret == 0) {
         page_rw.page_rw = 0x00U; /* page_read disable */
-        ret             = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
     }
     if (ret == 0) {
         ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_USER_BANK);
@@ -1539,7 +1446,7 @@ i32 lsm6dsr_boot_set(stmdev_ctx_t *ctx, u8 val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL3_C, (u8 *)&ctrl3_c, 1);
     if (ret == 0) {
         ctrl3_c.boot = (u8)val;
-        ret          = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL3_C, (u8 *)&ctrl3_c, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL3_C, (u8 *)&ctrl3_c, 1);
     }
     return ret;
 }
@@ -1807,7 +1714,7 @@ i32 lsm6dsr_xl_lp2_on_6d_set(stmdev_ctx_t *ctx, u8 val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL8_XL, (u8 *)&ctrl8_xl, 1);
     if (ret == 0) {
         ctrl8_xl.low_pass_on_6d = (u8)val;
-        ret                     = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL8_XL, (u8 *)&ctrl8_xl, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL8_XL, (u8 *)&ctrl8_xl, 1);
     }
     return ret;
 }
@@ -1842,8 +1749,8 @@ i32 lsm6dsr_xl_hp_path_on_out_set(stmdev_ctx_t *ctx, lsm6dsr_hp_slope_xl_en_t va
     if (ret == 0) {
         ctrl8_xl.hp_slope_xl_en = (((u8)val & 0x10U) >> 4);
         ctrl8_xl.hp_ref_mode_xl = (((u8)val & 0x20U) >> 5);
-        ctrl8_xl.hpcf_xl        = (u8)val & 0x07U;
-        ret                     = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL8_XL, (u8 *)&ctrl8_xl, 1);
+        ctrl8_xl.hpcf_xl        =   (u8)val & 0x07U;
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL8_XL, (u8 *)&ctrl8_xl, 1);
     }
     return ret;
 }
@@ -1980,7 +1887,7 @@ i32 lsm6dsr_gy_hp_path_internal_set(stmdev_ctx_t *ctx, lsm6dsr_hpm_g_t val) {
     if (ret == 0) {
         ctrl7_g.hp_en_g = (((u8)val & 0x80U) >> 7);
         ctrl7_g.hpm_g   = (u8)val & 0x03U;
-        ret             = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL7_G, (u8 *)&ctrl7_g, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL7_G, (u8 *)&ctrl7_g, 1);
     }
     return ret;
 }
@@ -2398,7 +2305,7 @@ i32 lsm6dsr_aux_gy_full_scale_set(stmdev_ctx_t *ctx, lsm6dsr_fs_g_ois_t val) {
     if (ret == 0) {
         ctrl1_ois.fs_g_ois   = (u8)val & 0x03U;
         ctrl1_ois.fs_125_ois = ((u8)val & 0x04U) >> 2;
-        ret                  = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL1_OIS, (u8 *)&ctrl1_ois, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL1_OIS, (u8 *)&ctrl1_ois, 1);
     }
     return ret;
 }
@@ -2833,7 +2740,7 @@ i32 lsm6dsr_spi_mode_set(stmdev_ctx_t *ctx, lsm6dsr_sim_t val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL3_C, (u8 *)&ctrl3_c, 1);
     if (ret == 0) {
         ctrl3_c.sim = (u8)val;
-        ret         = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL3_C, (u8 *)&ctrl3_c, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL3_C, (u8 *)&ctrl3_c, 1);
     }
     return ret;
 }
@@ -2908,7 +2815,7 @@ i32 lsm6dsr_i3c_disable_set(stmdev_ctx_t *ctx, lsm6dsr_i3c_disable_t val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
     if (ret == 0) {
         ctrl9_xl.i3c_disable = ((u8)val & 0x80U) >> 7;
-        ret                  = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
     }
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_I3C_BUS_AVB, (u8 *)&i3c_bus_avb, 1);
@@ -3233,7 +3140,7 @@ i32 lsm6dsr_all_on_int1_set(stmdev_ctx_t *ctx, u8 val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL4_C, (u8 *)&ctrl4_c, 1);
     if (ret == 0) {
         ctrl4_c.int2_on_int1 = (u8)val;
-        ret                  = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL4_C, (u8 *)&ctrl4_c, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL4_C, (u8 *)&ctrl4_c, 1);
     }
     return ret;
 }
@@ -3278,7 +3185,7 @@ i32 lsm6dsr_int_notification_set(stmdev_ctx_t *ctx, lsm6dsr_lir_t val) {
     }
     if (ret == 0) {
         page_rw.emb_func_lir = ((u8)val & 0x02U) >> 1;
-        ret                  = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_PAGE_RW, (u8 *)&page_rw, 1);
     }
     if (ret == 0) {
         ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_USER_BANK);
@@ -3499,7 +3406,7 @@ i32 lsm6dsr_gy_sleep_mode_set(stmdev_ctx_t *ctx, u8 val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL4_C, (u8 *)&ctrl4_c, 1);
     if (ret == 0) {
         ctrl4_c.sleep_g = (u8)val;
-        ret             = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL4_C, (u8 *)&ctrl4_c, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL4_C, (u8 *)&ctrl4_c, 1);
     }
     return ret;
 }
@@ -3881,9 +3788,7 @@ i32 lsm6dsr_tap_threshold_z_set(stmdev_ctx_t *ctx, u8 val) {
  */
 i32 lsm6dsr_tap_threshold_z_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_tap_ths_6d_t tap_ths_6d;
-    i32              ret;
-
-    ret  = lsm6dsr_read_reg(ctx, LSM6DSR_TAP_THS_6D, (u8 *)&tap_ths_6d, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_TAP_THS_6D, (u8 *)&tap_ths_6d, 1);
     *val = tap_ths_6d.tap_ths_z;
     return ret;
 }
@@ -3905,7 +3810,7 @@ i32 lsm6dsr_tap_shock_set(stmdev_ctx_t *ctx, u8 val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_INT_DUR2, (u8 *)&int_dur2, 1);
     if (ret == 0) {
         int_dur2.shock = (u8)val;
-        ret            = lsm6dsr_write_reg(ctx, LSM6DSR_INT_DUR2, (u8 *)&int_dur2, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_INT_DUR2, (u8 *)&int_dur2, 1);
     }
     return ret;
 }
@@ -3946,7 +3851,7 @@ i32 lsm6dsr_tap_quiet_set(stmdev_ctx_t *ctx, u8 val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_INT_DUR2, (u8 *)&int_dur2, 1);
     if (ret == 0) {
         int_dur2.quiet = (u8)val;
-        ret            = lsm6dsr_write_reg(ctx, LSM6DSR_INT_DUR2, (u8 *)&int_dur2, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_INT_DUR2, (u8 *)&int_dur2, 1);
     }
     return ret;
 }
@@ -3989,7 +3894,7 @@ i32 lsm6dsr_tap_dur_set(stmdev_ctx_t *ctx, u8 val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_INT_DUR2, (u8 *)&int_dur2, 1);
     if (ret == 0) {
         int_dur2.dur = (u8)val;
-        ret          = lsm6dsr_write_reg(ctx, LSM6DSR_INT_DUR2, (u8 *)&int_dur2, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_INT_DUR2, (u8 *)&int_dur2, 1);
     }
     return ret;
 }
@@ -4136,9 +4041,7 @@ i32 lsm6dsr_4d_mode_set(stmdev_ctx_t *ctx, u8 val) {
  */
 i32 lsm6dsr_4d_mode_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_tap_ths_6d_t tap_ths_6d;
-    i32              ret;
-
-    ret  = lsm6dsr_read_reg(ctx, LSM6DSR_TAP_THS_6D, (u8 *)&tap_ths_6d, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_TAP_THS_6D, (u8 *)&tap_ths_6d, 1);
     *val = tap_ths_6d.d4d_en;
     return ret;
 }
@@ -4278,11 +4181,11 @@ i32 lsm6dsr_fifo_watermark_set(stmdev_ctx_t *ctx, u16 val) {
     ret = lsm6dsr_read_reg(ctx, LSM6DSR_FIFO_CTRL2, (u8 *)&fifo_ctrl2, 1);
     if (ret == 0) {
         fifo_ctrl1.wtm = (u8)(0x00FFU & val);
-        ret            = lsm6dsr_write_reg(ctx, LSM6DSR_FIFO_CTRL1, (u8 *)&fifo_ctrl1, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_FIFO_CTRL1, (u8 *)&fifo_ctrl1, 1);
     }
     if (ret == 0) {
         fifo_ctrl2.wtm = (u8)((0x0100U & val) >> 8);
-        ret            = lsm6dsr_write_reg(ctx, LSM6DSR_FIFO_CTRL2, (u8 *)&fifo_ctrl2, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_FIFO_CTRL2, (u8 *)&fifo_ctrl2, 1);
     }
     return ret;
 }
@@ -4321,9 +4224,7 @@ i32 lsm6dsr_fifo_watermark_get(stmdev_ctx_t *ctx, u16 *val) {
  */
 i32 lsm6dsr_compression_algo_init_set(stmdev_ctx_t *ctx, u8 val) {
     lsm6dsr_emb_func_init_b_t emb_func_init_b;
-    i32                   ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_INIT_B, (u8 *)&emb_func_init_b, 1);
     }
@@ -4348,9 +4249,7 @@ i32 lsm6dsr_compression_algo_init_set(stmdev_ctx_t *ctx, u8 val) {
  */
 i32 lsm6dsr_compression_algo_init_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_emb_func_init_b_t emb_func_init_b;
-    i32                   ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_INIT_B, (u8 *)&emb_func_init_b, 1);
     }
@@ -4452,9 +4351,7 @@ i32 lsm6dsr_fifo_virtual_sens_odr_chg_set(stmdev_ctx_t *ctx, u8 val) {
  */
 i32 lsm6dsr_fifo_virtual_sens_odr_chg_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_fifo_ctrl2_t fifo_ctrl2;
-    i32              ret;
-
-    ret  = lsm6dsr_read_reg(ctx, LSM6DSR_FIFO_CTRL2, (u8 *)&fifo_ctrl2, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_FIFO_CTRL2, (u8 *)&fifo_ctrl2, 1);
     *val = fifo_ctrl2.odrchg_en;
     return ret;
 }
@@ -4489,9 +4386,7 @@ i32 lsm6dsr_compression_algo_real_time_set(stmdev_ctx_t *ctx, u8 val) {
  */
 i32 lsm6dsr_compression_algo_real_time_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_fifo_ctrl2_t fifo_ctrl2;
-    i32              ret;
-
-    ret  = lsm6dsr_read_reg(ctx, LSM6DSR_FIFO_CTRL2, (u8 *)&fifo_ctrl2, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_FIFO_CTRL2, (u8 *)&fifo_ctrl2, 1);
     *val = fifo_ctrl2.fifo_compr_rt_en;
     return ret;
 }
@@ -4528,9 +4423,7 @@ i32 lsm6dsr_fifo_stop_on_wtm_set(stmdev_ctx_t *ctx, u8 val) {
  */
 i32 lsm6dsr_fifo_stop_on_wtm_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_fifo_ctrl2_t fifo_ctrl2;
-    i32              ret;
-
-    ret  = lsm6dsr_read_reg(ctx, LSM6DSR_FIFO_CTRL2, (u8 *)&fifo_ctrl2, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_FIFO_CTRL2, (u8 *)&fifo_ctrl2, 1);
     *val = fifo_ctrl2.stop_on_wtm;
     return ret;
 }
@@ -4925,9 +4818,7 @@ i32 lsm6dsr_batch_counter_threshold_get(stmdev_ctx_t *ctx, u16 *val) {
 i32 lsm6dsr_fifo_data_level_get(stmdev_ctx_t *ctx, u16 *val) {
     lsm6dsr_fifo_status1_t fifo_status1;
     lsm6dsr_fifo_status2_t fifo_status2;
-    i32                ret;
-
-    ret = lsm6dsr_read_reg(ctx, LSM6DSR_FIFO_STATUS1, (u8 *)&fifo_status1, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_FIFO_STATUS1, (u8 *)&fifo_status1, 1);
     if (ret == 0) {
         ret  = lsm6dsr_read_reg(ctx, LSM6DSR_FIFO_STATUS2, (u8 *)&fifo_status2, 1);
         *val = fifo_status2.diff_fifo;
@@ -5341,7 +5232,7 @@ i32 lsm6dsr_den_polarity_set(stmdev_ctx_t *ctx, lsm6dsr_den_lh_t val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
     if (ret == 0) {
         ctrl9_xl.den_lh = (u8)val;
-        ret             = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
     }
     return ret;
 }
@@ -5416,7 +5307,7 @@ i32 lsm6dsr_den_mark_axis_x_set(stmdev_ctx_t *ctx, u8 val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
     if (ret == 0) {
         ctrl9_xl.den_z = (u8)val;
-        ret            = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
     }
     return ret;
 }
@@ -5449,7 +5340,7 @@ i32 lsm6dsr_den_mark_axis_y_set(stmdev_ctx_t *ctx, u8 val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
     if (ret == 0) {
         ctrl9_xl.den_y = (u8)val;
-        ret            = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
     }
     return ret;
 }
@@ -5482,7 +5373,7 @@ i32 lsm6dsr_den_mark_axis_z_set(stmdev_ctx_t *ctx, u8 val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
     if (ret == 0) {
         ctrl9_xl.den_x = (u8)val;
-        ret            = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL9_XL, (u8 *)&ctrl9_xl, 1);
     }
     return ret;
 }
@@ -5622,9 +5513,7 @@ i32 lsm6dsr_pedo_mode_set(stmdev_ctx_t *ctx, lsm6dsr_pedo_mode_t val) {
  */
 i32 lsm6dsr_pedo_mode_get(stmdev_ctx_t *ctx, lsm6dsr_pedo_mode_t *val) {
     lsm6dsr_pedo_cmd_reg_t pedo_cmd_reg;
-    i32                ret;
-
-    ret = lsm6dsr_ln_pg_read_byte(ctx, LSM6DSR_PEDO_CMD_REG, (u8 *)&pedo_cmd_reg);
+    i32 ret = lsm6dsr_ln_pg_read_byte(ctx, LSM6DSR_PEDO_CMD_REG, (u8 *)&pedo_cmd_reg);
     switch ((pedo_cmd_reg.ad_det_en << 1) | pedo_cmd_reg.fp_rejection_en) {
     case LSM6DSR_PEDO_BASE: *val = LSM6DSR_PEDO_BASE; break;
     case LSM6DSR_PEDO_BASE_FALSE_STEP_REJ: *val = LSM6DSR_PEDO_BASE_FALSE_STEP_REJ; break;
@@ -5644,9 +5533,7 @@ i32 lsm6dsr_pedo_mode_get(stmdev_ctx_t *ctx, lsm6dsr_pedo_mode_t *val) {
  */
 i32 lsm6dsr_pedo_step_detect_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_emb_func_status_t emb_func_status;
-    i32                   ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret  = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_STATUS, (u8 *)&emb_func_status, 1);
         *val = emb_func_status.is_step_det;
@@ -5733,9 +5620,7 @@ i32 lsm6dsr_pedo_steps_period_get(stmdev_ctx_t *ctx, u16 *val) {
  */
 i32 lsm6dsr_pedo_adv_detection_set(stmdev_ctx_t *ctx, u8 val) {
     lsm6dsr_pedo_cmd_reg_t pedo_cmd_reg;
-    i32                ret;
-
-    ret = lsm6dsr_ln_pg_read_byte(ctx, LSM6DSR_PEDO_CMD_REG, (u8 *)&pedo_cmd_reg);
+    i32 ret = lsm6dsr_ln_pg_read_byte(ctx, LSM6DSR_PEDO_CMD_REG, (u8 *)&pedo_cmd_reg);
     if (ret == 0) {
         pedo_cmd_reg.ad_det_en = (u8)val;
         ret = lsm6dsr_ln_pg_write_byte(ctx, LSM6DSR_PEDO_CMD_REG, (u8 *)&pedo_cmd_reg);
@@ -5770,9 +5655,7 @@ i32 lsm6dsr_pedo_adv_detection_get(stmdev_ctx_t *ctx, u8 *val) {
  */
 i32 lsm6dsr_pedo_false_step_rejection_set(stmdev_ctx_t *ctx, u8 val) {
     lsm6dsr_pedo_cmd_reg_t pedo_cmd_reg;
-    i32                ret;
-
-    ret = lsm6dsr_ln_pg_read_byte(ctx, LSM6DSR_PEDO_CMD_REG, (u8 *)&pedo_cmd_reg);
+    i32 ret = lsm6dsr_ln_pg_read_byte(ctx, LSM6DSR_PEDO_CMD_REG, (u8 *)&pedo_cmd_reg);
     if (ret == 0) {
         pedo_cmd_reg.fp_rejection_en = (u8)val;
         ret = lsm6dsr_ln_pg_write_byte(ctx, LSM6DSR_PEDO_CMD_REG, (u8 *)&pedo_cmd_reg);
@@ -5808,9 +5691,7 @@ i32 lsm6dsr_pedo_false_step_rejection_get(stmdev_ctx_t *ctx, u8 *val) {
  */
 i32 lsm6dsr_pedo_int_mode_set(stmdev_ctx_t *ctx, lsm6dsr_carry_count_en_t val) {
     lsm6dsr_pedo_cmd_reg_t pedo_cmd_reg;
-    i32                ret;
-
-    ret = lsm6dsr_ln_pg_read_byte(ctx, LSM6DSR_PEDO_CMD_REG, (u8 *)&pedo_cmd_reg);
+    i32 ret = lsm6dsr_ln_pg_read_byte(ctx, LSM6DSR_PEDO_CMD_REG, (u8 *)&pedo_cmd_reg);
     if (ret == 0) {
         pedo_cmd_reg.carry_count_en = (u8)val;
         ret = lsm6dsr_ln_pg_write_byte(ctx, LSM6DSR_PEDO_CMD_REG, (u8 *)&pedo_cmd_reg);
@@ -5829,9 +5710,7 @@ i32 lsm6dsr_pedo_int_mode_set(stmdev_ctx_t *ctx, lsm6dsr_carry_count_en_t val) {
  */
 i32 lsm6dsr_pedo_int_mode_get(stmdev_ctx_t *ctx, lsm6dsr_carry_count_en_t *val) {
     lsm6dsr_pedo_cmd_reg_t pedo_cmd_reg;
-    i32                ret;
-
-    ret = lsm6dsr_ln_pg_read_byte(ctx, LSM6DSR_PEDO_CMD_REG, (u8 *)&pedo_cmd_reg);
+    i32 ret = lsm6dsr_ln_pg_read_byte(ctx, LSM6DSR_PEDO_CMD_REG, (u8 *)&pedo_cmd_reg);
     switch (pedo_cmd_reg.carry_count_en) {
     case LSM6DSR_EVERY_STEP: *val = LSM6DSR_EVERY_STEP; break;
     case LSM6DSR_COUNT_OVERFLOW: *val = LSM6DSR_COUNT_OVERFLOW; break;
@@ -5912,9 +5791,7 @@ i32 lsm6dsr_motion_sens_get(stmdev_ctx_t *ctx, u8 *val) {
  */
 i32 lsm6dsr_motion_flag_data_ready_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_emb_func_status_t emb_func_status;
-    i32                   ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_STATUS, (u8 *)&emb_func_status, 1);
     }
@@ -5997,9 +5874,7 @@ i32 lsm6dsr_tilt_sens_get(stmdev_ctx_t *ctx, u8 *val) {
  */
 i32 lsm6dsr_tilt_flag_data_ready_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_emb_func_status_t emb_func_status;
-    i32                   ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_STATUS, (u8 *)&emb_func_status, 1);
     }
@@ -6476,9 +6351,7 @@ i32 lsm6dsr_mag_x_orient_get(stmdev_ctx_t *ctx, lsm6dsr_mag_x_axis_t *val) {
  */
 i32 lsm6dsr_long_cnt_flag_data_ready_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_emb_func_status_t emb_func_status;
-    i32                   ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_STATUS, (u8 *)&emb_func_status, 1);
     }
@@ -6741,9 +6614,7 @@ i32 lsm6dsr_fsm_out_get(stmdev_ctx_t *ctx, lsm6dsr_fsm_out_t *val) {
  */
 i32 lsm6dsr_fsm_data_rate_set(stmdev_ctx_t *ctx, lsm6dsr_fsm_odr_t val) {
     lsm6dsr_emb_func_odr_cfg_b_t emb_func_odr_cfg_b;
-    i32                      ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_ODR_CFG_B, (u8 *)&emb_func_odr_cfg_b, 1);
     }
@@ -6769,9 +6640,7 @@ i32 lsm6dsr_fsm_data_rate_set(stmdev_ctx_t *ctx, lsm6dsr_fsm_odr_t val) {
  */
 i32 lsm6dsr_fsm_data_rate_get(stmdev_ctx_t *ctx, lsm6dsr_fsm_odr_t *val) {
     lsm6dsr_emb_func_odr_cfg_b_t emb_func_odr_cfg_b;
-    i32                      ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_ODR_CFG_B, (u8 *)&emb_func_odr_cfg_b, 1);
     }
@@ -6798,9 +6667,7 @@ i32 lsm6dsr_fsm_data_rate_get(stmdev_ctx_t *ctx, lsm6dsr_fsm_odr_t *val) {
  */
 i32 lsm6dsr_fsm_init_set(stmdev_ctx_t *ctx, u8 val) {
     lsm6dsr_emb_func_init_b_t emb_func_init_b;
-    i32                   ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_INIT_B, (u8 *)&emb_func_init_b, 1);
     }
@@ -6824,9 +6691,7 @@ i32 lsm6dsr_fsm_init_set(stmdev_ctx_t *ctx, u8 val) {
  */
 i32 lsm6dsr_fsm_init_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_emb_func_init_b_t emb_func_init_b;
-    i32                   ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_INIT_B, (u8 *)&emb_func_init_b, 1);
     }
@@ -7047,8 +6912,7 @@ i32 lsm6dsr_sh_slave_connected_get(stmdev_ctx_t *ctx, lsm6dsr_aux_sens_on_t *val
  */
 i32 lsm6dsr_sh_master_set(stmdev_ctx_t *ctx, u8 val) {
     lsm6dsr_master_config_t mCfg;
-    i32                     ret; 
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK); 
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK); 
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&mCfg, 1);
     } 
@@ -7659,14 +7523,14 @@ i32 lsm6dsr_s4s_tph_val_set(stmdev_ctx_t *ctx, u16 val) {
     ret = lsm6dsr_read_reg(ctx, LSM6DSR_S4S_TPH_L, (u8 *)&s4s_tph_l, 1);
     if (ret == 0) {
         s4s_tph_l.tph_l = (u8)(val & 0x007FU);
-        ret             = lsm6dsr_write_reg(ctx, LSM6DSR_S4S_TPH_L, (u8 *)&s4s_tph_l, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_S4S_TPH_L, (u8 *)&s4s_tph_l, 1);
     }
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_S4S_TPH_H, (u8 *)&s4s_tph_h, 1);
     }
     if (ret == 0) {
         s4s_tph_h.tph_h = (u8)((val & 0x7F80U) >> 7);
-        ret             = lsm6dsr_write_reg(ctx, LSM6DSR_S4S_TPH_H, (u8 *)&s4s_tph_h, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_S4S_TPH_H, (u8 *)&s4s_tph_h, 1);
     }
     return ret;
 }
@@ -7748,9 +7612,7 @@ i32 lsm6dsr_s4s_res_ratio_get(stmdev_ctx_t *ctx, lsm6dsr_s4s_res_ratio_t *val) {
  */
 i32 lsm6dsr_s4s_command_set(stmdev_ctx_t *ctx, u8 val) {
     lsm6dsr_s4s_st_cmd_code_t s4s_st_cmd_code;
-    i32                   ret;
-
-    ret = lsm6dsr_read_reg(ctx, LSM6DSR_S4S_ST_CMD_CODE, (u8 *)&s4s_st_cmd_code, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_S4S_ST_CMD_CODE, (u8 *)&s4s_st_cmd_code, 1);
     if (ret == 0) {
         s4s_st_cmd_code.s4s_st_cmd_code = (u8)val;
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_S4S_ST_CMD_CODE, (u8 *)&s4s_st_cmd_code, 1);
@@ -7805,9 +7667,7 @@ i32 lsm6dsr_s4s_dt_set(stmdev_ctx_t *ctx, u8 val) {
  */
 i32 lsm6dsr_s4s_dt_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_s4s_dt_reg_t s4s_dt_reg;
-    i32              ret;
-
-    ret  = lsm6dsr_read_reg(ctx, LSM6DSR_S4S_DT_REG, (u8 *)&s4s_dt_reg, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_S4S_DT_REG, (u8 *)&s4s_dt_reg, 1);
     *val = s4s_dt_reg.dt;
     return ret;
 }

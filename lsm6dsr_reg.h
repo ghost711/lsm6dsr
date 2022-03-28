@@ -618,7 +618,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_d6d_src_t;
 
-    #define LSM6DSR_STATUS_REG 0x1EU
+#define LSM6DSR_STATUS_REG 0x1EU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 xlda : 1;
@@ -633,7 +633,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_status_reg_t;
 
-    #define LSM6DSR_STATUS_SPIAUX 0x1EU
+#define LSM6DSR_STATUS_SPIAUX 0x1EU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 xlda : 1;
@@ -727,7 +727,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_status_b_mainpage_t;
 
-    #define LSM6DSR_STATUS_MASTER_MAINPAGE 0x39U
+#define LSM6DSR_STATUS_MASTER_MAINPAGE 0x39U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 sens_hub_endop : 1;
@@ -1842,27 +1842,27 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_emb_func_init_b_t;
 
-    #define LSM6DSR_MAG_SENSITIVITY_L 0xBAU
-    #define LSM6DSR_MAG_SENSITIVITY_H 0xBBU
-    #define LSM6DSR_MAG_OFFX_L        0xC0U
-    #define LSM6DSR_MAG_OFFX_H        0xC1U
-    #define LSM6DSR_MAG_OFFY_L        0xC2U
-    #define LSM6DSR_MAG_OFFY_H        0xC3U
-    #define LSM6DSR_MAG_OFFZ_L        0xC4U
-    #define LSM6DSR_MAG_OFFZ_H        0xC5U
-    #define LSM6DSR_MAG_SI_XX_L       0xC6U
-    #define LSM6DSR_MAG_SI_XX_H       0xC7U
-    #define LSM6DSR_MAG_SI_XY_L       0xC8U
-    #define LSM6DSR_MAG_SI_XY_H       0xC9U
-    #define LSM6DSR_MAG_SI_XZ_L       0xCAU
-    #define LSM6DSR_MAG_SI_XZ_H       0xCBU
-    #define LSM6DSR_MAG_SI_YY_L       0xCCU
-    #define LSM6DSR_MAG_SI_YY_H       0xCDU
-    #define LSM6DSR_MAG_SI_YZ_L       0xCEU
-    #define LSM6DSR_MAG_SI_YZ_H       0xCFU
-    #define LSM6DSR_MAG_SI_ZZ_L       0xD0U
-    #define LSM6DSR_MAG_SI_ZZ_H       0xD1U
-    #define LSM6DSR_MAG_CFG_A         0xD4U
+#define LSM6DSR_MAG_SENSITIVITY_L 0xBAU
+#define LSM6DSR_MAG_SENSITIVITY_H 0xBBU
+#define LSM6DSR_MAG_OFFX_L        0xC0U
+#define LSM6DSR_MAG_OFFX_H        0xC1U
+#define LSM6DSR_MAG_OFFY_L        0xC2U
+#define LSM6DSR_MAG_OFFY_H        0xC3U
+#define LSM6DSR_MAG_OFFZ_L        0xC4U
+#define LSM6DSR_MAG_OFFZ_H        0xC5U
+#define LSM6DSR_MAG_SI_XX_L       0xC6U
+#define LSM6DSR_MAG_SI_XX_H       0xC7U
+#define LSM6DSR_MAG_SI_XY_L       0xC8U
+#define LSM6DSR_MAG_SI_XY_H       0xC9U
+#define LSM6DSR_MAG_SI_XZ_L       0xCAU
+#define LSM6DSR_MAG_SI_XZ_H       0xCBU
+#define LSM6DSR_MAG_SI_YY_L       0xCCU
+#define LSM6DSR_MAG_SI_YY_H       0xCDU
+#define LSM6DSR_MAG_SI_YZ_L       0xCEU
+#define LSM6DSR_MAG_SI_YZ_H       0xCFU
+#define LSM6DSR_MAG_SI_ZZ_L       0xD0U
+#define LSM6DSR_MAG_SI_ZZ_H       0xD1U
+#define LSM6DSR_MAG_CFG_A         0xD4U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 mag_z_axis : 3;
@@ -1877,7 +1877,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_mag_cfg_a_t;
 
-    #define LSM6DSR_MAG_CFG_B 0xD5U
+#define LSM6DSR_MAG_CFG_B 0xD5U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 mag_x_axis : 3;
@@ -1888,12 +1888,12 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_mag_cfg_b_t;
 
-    #define LSM6DSR_FSM_LC_TIMEOUT_L 0x17AU
-    #define LSM6DSR_FSM_LC_TIMEOUT_H 0x17BU
-    #define LSM6DSR_FSM_PROGRAMS     0x17CU
-    #define LSM6DSR_FSM_START_ADD_L  0x17EU
-    #define LSM6DSR_FSM_START_ADD_H  0x17FU
-    #define LSM6DSR_PEDO_CMD_REG     0x183U
+#define LSM6DSR_FSM_LC_TIMEOUT_L 0x17AU
+#define LSM6DSR_FSM_LC_TIMEOUT_H 0x17BU
+#define LSM6DSR_FSM_PROGRAMS     0x17CU
+#define LSM6DSR_FSM_START_ADD_L  0x17EU
+#define LSM6DSR_FSM_START_ADD_H  0x17FU
+#define LSM6DSR_PEDO_CMD_REG     0x183U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 ad_det_en : 1;
@@ -1910,10 +1910,10 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_pedo_cmd_reg_t;
 
-    #define LSM6DSR_PEDO_DEB_STEPS_CONF 0x184U
-    #define LSM6DSR_PEDO_SC_DELTAT_L    0x1D0U
-    #define LSM6DSR_PEDO_SC_DELTAT_H    0x1D1U
-    #define LSM6DSR_SENSOR_HUB_1        0x02U
+#define LSM6DSR_PEDO_DEB_STEPS_CONF 0x184U
+#define LSM6DSR_PEDO_SC_DELTAT_L    0x1D0U
+#define LSM6DSR_PEDO_SC_DELTAT_H    0x1D1U
+#define LSM6DSR_SENSOR_HUB_1        0x02U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
