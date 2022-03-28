@@ -2348,7 +2348,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_master_config_t;
 
-    #define LSM6DSR_SLV0_ADD 0x15U
+#define LSM6DSR_SLV0_ADD 0x15U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 rw_0 : 1;
@@ -2359,12 +2359,12 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_slv0_add_t;
 
-    #define LSM6DSR_SLV0_SUBADD 0x16U
+#define LSM6DSR_SLV0_SUBADD 0x16U
 typedef struct {
     u8 slave0_reg : 8;
 } lsm6dsr_slv0_subadd_t;
 
-    #define LSM6DSR_SLV0_CONFIG 0x17U
+#define LSM6DSR_SLV0_CONFIG 0x17U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 slave0_numop : 3;
@@ -2379,7 +2379,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_slv0_config_t;
 
-    #define LSM6DSR_SLV1_ADD 0x18U
+#define LSM6DSR_SLV1_ADD 0x18U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 r_1 : 1;
@@ -2390,12 +2390,12 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_slv1_add_t;
 
-    #define LSM6DSR_SLV1_SUBADD 0x19U
+#define LSM6DSR_SLV1_SUBADD 0x19U
 typedef struct {
     u8 slave1_reg : 8;
 } lsm6dsr_slv1_subadd_t;
 
-    #define LSM6DSR_SLV1_CONFIG 0x1AU
+#define LSM6DSR_SLV1_CONFIG 0x1AU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 slave1_numop : 3;
