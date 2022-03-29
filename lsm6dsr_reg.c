@@ -7346,9 +7346,14 @@ i32 lsm6dsr_sh_slv1_cfg_read(stmdev_ctx_t *ctx, lsm6dsr_sh_cfg_read_t *val) {
     lsm6dsr_slv1_add_t    slv1_add;
     i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
     if (ret == 0) {
-        slv1_add.slave1_add = (u8)(val->slv_add >> 1);
-        slv1_add.r_1        = 1;
-        ret                 = lsm6dsr_write_reg(ctx, LSM6DSR_SLV1_ADD, (u8 *)&slv1_add, 1);
+        #define FIX_THIS 1
+        #if FIX_THIS == 1
+          slv1_add.slave1_add = (u8)val->slv_add;
+        #else
+          slv1_add.slave1_add = (u8)(val->slv_add >> 1);
+        #endif
+        slv1_add.r_1 = 1;
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_SLV1_ADD, (u8 *)&slv1_add, 1);
     }
     if (ret == 0) {
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_SLV1_SUBADD, &(val->slv_subadd), 1);
@@ -7382,9 +7387,14 @@ i32 lsm6dsr_sh_slv2_cfg_read(stmdev_ctx_t *ctx, lsm6dsr_sh_cfg_read_t *val) {
     lsm6dsr_slv2_add_t    slv2_add;
     i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
     if (ret == 0) {
-        slv2_add.slave2_add = (u8)(val->slv_add >> 1);
-        slv2_add.r_2        = 1;
-        ret                 = lsm6dsr_write_reg(ctx, LSM6DSR_SLV2_ADD, (u8 *)&slv2_add, 1);
+        #define FIX_THIS 1
+        #if FIX_THIS == 1 
+          slv2_add.slave2_add = (u8)val->slv_add;
+        #else
+          slv2_add.slave2_add = (u8)(val->slv_add >> 1);
+        #endif
+        slv2_add.r_2 = 1;
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_SLV2_ADD, (u8 *)&slv2_add, 1);
     }
     if (ret == 0) {
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_SLV2_SUBADD, (u8 *)&(val->slv_subadd), 1);
@@ -7418,9 +7428,14 @@ i32 lsm6dsr_sh_slv3_cfg_read(stmdev_ctx_t *ctx, lsm6dsr_sh_cfg_read_t *val) {
     lsm6dsr_slv3_add_t    slv3_add;
     i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
     if (ret == 0) {
-        slv3_add.slave3_add = (u8)(val->slv_add >> 1);
-        slv3_add.r_3        = 1;
-        ret                 = lsm6dsr_write_reg(ctx, LSM6DSR_SLV3_ADD, (u8 *)&slv3_add, 1);
+        #define FIX_THIS 1
+        #if FIX_THIS == 1  
+          slv3_add.slave3_add = (u8)val->slv_add;
+        #else
+          slv3_add.slave3_add = (u8)(val->slv_add >> 1);
+        #endif
+        slv3_add.r_3 = 1;
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_SLV3_ADD, (u8 *)&slv3_add, 1);
     }
     if (ret == 0) {
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_SLV3_SUBADD, &(val->slv_subadd), 1);
