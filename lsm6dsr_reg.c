@@ -19,6 +19,8 @@
 
 #include "lsm6dsr_reg.h"
 
+#define FIX_SLAVE_ADDR_ERROR 1  /** Added 20220-3-28, JM. */
+
 /**
  * @defgroup    LSM6DSR
  * @brief       This file provides a set of functions needed to drive the
@@ -7304,9 +7306,8 @@ i32 lsm6dsr_sh_slv0_cfg_read(stmdev_ctx_t *ctx, lsm6dsr_sh_cfg_read_t *val) {
     lsm6dsr_slv0_config_t slv0_config;
     lsm6dsr_slv0_add_t    slv0_add;
     i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK); 
-    if (ret == 0) {
-        #define FIX_THIS 1
-        #if FIX_THIS == 1
+    if (ret == 0) { 
+        #if FIX_SLAVE_ADDR_ERROR == 1
           slv0_add.slave0 = (u8)val->slv_add;
         #else
           slv0_add.slave0 = (u8)val->slv_add >> 1;
@@ -7345,9 +7346,8 @@ i32 lsm6dsr_sh_slv1_cfg_read(stmdev_ctx_t *ctx, lsm6dsr_sh_cfg_read_t *val) {
     lsm6dsr_slv1_config_t slv1_config;
     lsm6dsr_slv1_add_t    slv1_add;
     i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
-    if (ret == 0) {
-        #define FIX_THIS 1
-        #if FIX_THIS == 1
+    if (ret == 0) { 
+        #if FIX_SLAVE_ADDR_ERROR == 1
           slv1_add.slave1_add = (u8)val->slv_add;
         #else
           slv1_add.slave1_add = (u8)(val->slv_add >> 1);
@@ -7386,9 +7386,8 @@ i32 lsm6dsr_sh_slv2_cfg_read(stmdev_ctx_t *ctx, lsm6dsr_sh_cfg_read_t *val) {
     lsm6dsr_slv2_config_t slv2_config;
     lsm6dsr_slv2_add_t    slv2_add;
     i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
-    if (ret == 0) {
-        #define FIX_THIS 1
-        #if FIX_THIS == 1 
+    if (ret == 0) { 
+        #if FIX_SLAVE_ADDR_ERROR == 1 
           slv2_add.slave2_add = (u8)val->slv_add;
         #else
           slv2_add.slave2_add = (u8)(val->slv_add >> 1);
@@ -7428,8 +7427,7 @@ i32 lsm6dsr_sh_slv3_cfg_read(stmdev_ctx_t *ctx, lsm6dsr_sh_cfg_read_t *val) {
     lsm6dsr_slv3_add_t    slv3_add;
     i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
     if (ret == 0) {
-        #define FIX_THIS 1
-        #if FIX_THIS == 1  
+        #if FIX_SLAVE_ADDR_ERROR == 1  
           slv3_add.slave3_add = (u8)val->slv_add;
         #else
           slv3_add.slave3_add = (u8)(val->slv_add >> 1);
