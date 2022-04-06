@@ -2847,8 +2847,8 @@ i32 lsm6dsr_i3c_disable_get(stmdev_ctx_t *ctx, lsm6dsr_i3c_disable_t *val) {
     switch ((ctrl9_xl.i3c_disable << 7) + i3c_bus_avb.i3c_bus_avb_sel) {
     case LSM6DSR_I3C_DISABLE: *val = LSM6DSR_I3C_DISABLE; break;
     case LSM6DSR_I3C_ENABLE_T_50us: *val = LSM6DSR_I3C_ENABLE_T_50us; break;
-    case LSM6DSR_I3C_ENABLE_T_2us: *val = LSM6DSR_I3C_ENABLE_T_2us; break;
-    case LSM6DSR_I3C_ENABLE_T_1ms: *val = LSM6DSR_I3C_ENABLE_T_1ms; break;
+    case LSM6DSR_I3C_ENABLE_T_2us:  *val = LSM6DSR_I3C_ENABLE_T_2us;  break;
+    case LSM6DSR_I3C_ENABLE_T_1ms:  *val = LSM6DSR_I3C_ENABLE_T_1ms;  break;
     case LSM6DSR_I3C_ENABLE_T_25ms: *val = LSM6DSR_I3C_ENABLE_T_25ms; break;
     default: *val = LSM6DSR_I3C_DISABLE; break;
     }
@@ -4887,11 +4887,9 @@ i32 lsm6dsr_fifo_ovr_flag_get(stmdev_ctx_t *ctx, u8 *val) {
  *
  */
 i32 lsm6dsr_fifo_wtm_flag_get(stmdev_ctx_t *ctx, u8 *val) {
-    lsm6dsr_fifo_status2_t fifo_status2;
-    i32                ret;
-
-    ret  = lsm6dsr_read_reg(ctx, LSM6DSR_FIFO_STATUS2, (u8 *)&fifo_status2, 1);
-    *val = fifo_status2.fifo_wtm_ia;
+    lsm6dsr_fifo_status2_t fifoStatus2;
+    i32 ret  = lsm6dsr_read_reg(ctx, LSM6DSR_FIFO_STATUS2, (u8 *)&fifoStatus2, 1);
+    *val = fifoStatus2.fifo_wtm_ia;
     return ret;
 }
 

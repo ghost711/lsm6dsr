@@ -753,7 +753,7 @@ typedef struct {
     u8 diff_fifo : 8;
 } lsm6dsr_fifo_status1_t;
 
-    #define LSM6DSR_FIFO_STATUS2 0x3BU
+#define LSM6DSR_FIFO_STATUS2 0x3BU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 diff_fifo : 2;
