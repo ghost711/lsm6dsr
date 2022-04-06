@@ -7273,7 +7273,11 @@ i32 lsm6dsr_sh_cfg_write(stmdev_ctx_t *ctx, lsm6dsr_sh_cfg_write_t *val) {
     lsm6dsr_slv0_add_t slv0_add;
     i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK); 
     if (ret == 0) {
-        slv0_add.slave0 = (u8)(val->slv0_add >> 1);
+        #if FIX_SLAVE_ADDR_ERROR == 1
+            slv0_add.slave0 = (u8)val->slv0_add; 
+        #else
+            slv0_add.slave0 = (u8)(val->slv0_add >> 1);
+        #endif
         slv0_add.rw_0   = 0;
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_SLV0_ADD, (u8 *)&(slv0_add), 1);
     } 
