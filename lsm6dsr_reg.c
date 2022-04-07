@@ -5192,7 +5192,7 @@ i32 lsm6dsr_den_mode_set(stmdev_ctx_t *ctx, lsm6dsr_den_mode_t val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL6_C, (u8 *)&ctrl6_c, 1);
     if (ret == 0) {
         ctrl6_c.den_mode = (u8)val;
-        ret              = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL6_C, (u8 *)&ctrl6_c, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL6_C, (u8 *)&ctrl6_c, 1);
     }
     return ret;
 }

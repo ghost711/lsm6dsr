@@ -2667,8 +2667,10 @@ typedef enum {
 i32 lsm6dsr_xl_full_scale_set(stmdev_ctx_t *ctx, lsm6dsr_fs_xl_t val);
 i32 lsm6dsr_xl_full_scale_get(stmdev_ctx_t *ctx, lsm6dsr_fs_xl_t *val);
 
-typedef enum {
-    LSM6DSR_XL_ODR_OFF    = 0,
+/** Python:      print({ code: 13 * (1 << (code - 1)) for code in np.arange(1, 11) })
+  { 1: 13, 2: 26, 3: 52, 4: 104, 5: 208, 6: 416, 7: 832, 8: 1664, 9: 3328, 10: 6656 } */
+typedef enum {                   /** Sample rate from code ~= 13 * (2^(code - 1));    */
+    LSM6DSR_XL_ODR_OFF    = 0,   /**                       ~= 13 * (1 << (code - 1)); */
     LSM6DSR_XL_ODR_12Hz5  = 1,
     LSM6DSR_XL_ODR_26Hz   = 2,
     LSM6DSR_XL_ODR_52Hz   = 3,
