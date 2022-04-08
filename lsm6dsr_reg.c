@@ -2918,54 +2918,51 @@ u8 _______LSM6DSR_interrupt_pins______________________________________________;
  *
  */
 i32 lsm6dsr_pin_int1_route_set(stmdev_ctx_t *ctx, lsm6dsr_pin_int1_route_t *val) {
-    lsm6dsr_tap_cfg2_t tap_cfg2;
+    lsm6dsr_tap_cfg2_t tapCfg2;
+    lsm6dsr_emb_func_int1_t efi1 = val->emb_func_int1;
+    lsm6dsr_fsm_int1_a_t    fsmA = val->fsm_int1_a;
+    lsm6dsr_fsm_int1_b_t    fsmB = val->fsm_int1_b;
+    lsm6dsr_int1_ctrl_t     i1c  = val->int1_ctrl;
     i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    if (ret == 0) 
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_EMB_FUNC_INT1, (u8 *)&efi1, 1); 
+    if (ret == 0) 
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_FSM_INT1_A, (u8 *)&fsmA, 1); 
+    if (ret == 0) 
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_FSM_INT1_B, (u8 *)&fsmB, 1); 
+    if (ret == 0) 
+        ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_USER_BANK); 
     if (ret == 0) {
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_EMB_FUNC_INT1, (u8 *)&val->emb_func_int1, 1);
-    }
-    if (ret == 0) {
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_FSM_INT1_A, (u8 *)&val->fsm_int1_a, 1);
-    }
-    if (ret == 0) {
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_FSM_INT1_B, (u8 *)&val->fsm_int1_b, 1);
-    }
-    if (ret == 0) {
-        ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_USER_BANK);
-    }
-    if (ret == 0) {
-        if ((val->emb_func_int1.int1_fsm_lc | val->emb_func_int1.int1_sig_mot |
-             val->emb_func_int1.int1_step_detector | val->emb_func_int1.int1_tilt |
-             val->fsm_int1_a.int1_fsm1 | val->fsm_int1_a.int1_fsm2 | val->fsm_int1_a.int1_fsm3 |
-             val->fsm_int1_a.int1_fsm4 | val->fsm_int1_a.int1_fsm5 | val->fsm_int1_a.int1_fsm6 |
-             val->fsm_int1_a.int1_fsm7 | val->fsm_int1_a.int1_fsm8 | val->fsm_int1_b.int1_fsm9 |
-             val->fsm_int1_b.int1_fsm10 | val->fsm_int1_b.int1_fsm11 | val->fsm_int1_b.int1_fsm12 |
-             val->fsm_int1_b.int1_fsm13 | val->fsm_int1_b.int1_fsm14 | val->fsm_int1_b.int1_fsm15 |
-             val->fsm_int1_b.int1_fsm16) != PROPERTY_DISABLE) {
+        if ((efi1.int1_fsm_lc | efi1.int1_sig_mot | efi1.int1_step_detector |
+           efi1.int1_tilt | fsmA.int1_fsm1 | fsmA.int1_fsm2  | fsmA.int1_fsm3 | 
+           fsmA.int1_fsm4 | fsmA.int1_fsm5 | fsmA.int1_fsm6  | fsmA.int1_fsm7 | 
+           fsmA.int1_fsm8 | fsmB.int1_fsm9 | fsmB.int1_fsm10 | fsmB.int1_fsm11 | 
+           fsmB.int1_fsm12 | fsmB.int1_fsm13 | fsmB.int1_fsm14 | 
+                       fsmB.int1_fsm15 | fsmB.int1_fsm16) != PROPERTY_DISABLE) {
             val->md1_cfg.int1_emb_func = PROPERTY_ENABLE;
         } else {
             val->md1_cfg.int1_emb_func = PROPERTY_DISABLE;
         }
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_INT1_CTRL, (u8 *)&val->int1_ctrl, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_INT1_CTRL, (u8 *)&i1c, 1);
+    }
+    lsm6dsr_md1_cfg_t md1 = val->md1_cfg;
+    if (ret == 0) {
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_MD1_CFG, (u8 *)&md1, 1);
     }
     if (ret == 0) {
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_MD1_CFG, (u8 *)&val->md1_cfg, 1);
-    }
-    if (ret == 0) {
-        ret = lsm6dsr_read_reg(ctx, LSM6DSR_TAP_CFG2, (u8 *)&tap_cfg2, 1);
-
-        if ((val->int1_ctrl.den_drdy_flag | val->int1_ctrl.int1_boot | val->int1_ctrl.int1_cnt_bdr |
-             val->int1_ctrl.int1_drdy_g | val->int1_ctrl.int1_drdy_xl |
-             val->int1_ctrl.int1_fifo_full | val->int1_ctrl.int1_fifo_ovr |
-             val->int1_ctrl.int1_fifo_th | val->md1_cfg.int1_6d | val->md1_cfg.int1_double_tap |
-             val->md1_cfg.int1_ff | val->md1_cfg.int1_wu | val->md1_cfg.int1_single_tap |
-             val->md1_cfg.int1_sleep_change) != PROPERTY_DISABLE) {
-            tap_cfg2.interrupts_enable = PROPERTY_ENABLE;
+        ret = lsm6dsr_read_reg(ctx, LSM6DSR_TAP_CFG2, (u8 *)&tapCfg2, 1);
+        if ((i1c.den_drdy_flag | i1c.int1_boot    | i1c.int1_cnt_bdr   |
+             i1c.int1_drdy_g   | i1c.int1_drdy_xl | i1c.int1_fifo_full | 
+             i1c.int1_fifo_ovr | i1c.int1_fifo_th |  
+             md1.int1_6d | md1.int1_double_tap | md1.int1_ff | md1.int1_wu | 
+             md1.int1_single_tap | md1.int1_sleep_change) != PROPERTY_DISABLE) {
+            tapCfg2.interrupts_enable = PROPERTY_ENABLE;
         } else {
-            tap_cfg2.interrupts_enable = PROPERTY_DISABLE;
+            tapCfg2.interrupts_enable = PROPERTY_DISABLE;
         }
     }
     if (ret == 0) {
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_TAP_CFG2, (u8 *)&tap_cfg2, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_TAP_CFG2, (u8 *)&tapCfg2, 1);
     }
     return ret;
 }
@@ -3011,54 +3008,52 @@ i32 lsm6dsr_pin_int1_route_get(stmdev_ctx_t *ctx, lsm6dsr_pin_int1_route_t *val)
  * @retval        Interface status (MANDATORY: return 0 -> no Error).
  *
  */
-i32 lsm6dsr_pin_int2_route_set(stmdev_ctx_t *ctx, lsm6dsr_pin_int2_route_t *val) {
-    lsm6dsr_tap_cfg2_t tap_cfg2;
+i32 lsm6dsr_pin_int2_route_set(stmdev_ctx_t *ctx, lsm6dsr_pin_int2_route_t *val) {    
+    lsm6dsr_emb_func_int2_t efi2 = val->emb_func_int2;
+    lsm6dsr_fsm_int2_a_t    fsmA = val->fsm_int2_a;
+    lsm6dsr_fsm_int2_b_t    fsmB = val->fsm_int2_b;
+    lsm6dsr_int2_ctrl_t     i2c  = val->int2_ctrl;
     i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    if (ret == 0) 
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_EMB_FUNC_INT2, (u8 *)&efi2, 1); 
+    if (ret == 0) 
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_FSM_INT2_A, (u8 *)&fsmA, 1); 
+    if (ret == 0) 
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_FSM_INT2_B, (u8 *)&fsmB, 1); 
+    if (ret == 0) 
+        ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_USER_BANK); 
     if (ret == 0) {
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_EMB_FUNC_INT2, (u8 *)&val->emb_func_int2, 1);
-    }
-    if (ret == 0) {
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_FSM_INT2_A, (u8 *)&val->fsm_int2_a, 1);
-    }
-    if (ret == 0) {
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_FSM_INT2_B, (u8 *)&val->fsm_int2_b, 1);
-    }
-    if (ret == 0) {
-        ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_USER_BANK);
-    }
-    if (ret == 0) {
-        if ((val->emb_func_int2.int2_step_detector | val->emb_func_int2.int2_tilt |
-             val->emb_func_int2.int2_sig_mot | val->emb_func_int2.int2_fsm_lc |
-             val->fsm_int2_a.int2_fsm1 | val->fsm_int2_a.int2_fsm2 | val->fsm_int2_a.int2_fsm3 |
-             val->fsm_int2_a.int2_fsm4 | val->fsm_int2_a.int2_fsm5 | val->fsm_int2_a.int2_fsm6 |
-             val->fsm_int2_a.int2_fsm7 | val->fsm_int2_a.int2_fsm8 | val->fsm_int2_b.int2_fsm9 |
-             val->fsm_int2_b.int2_fsm10 | val->fsm_int2_b.int2_fsm11 | val->fsm_int2_b.int2_fsm12 |
-             val->fsm_int2_b.int2_fsm13 | val->fsm_int2_b.int2_fsm14 | val->fsm_int2_b.int2_fsm15 |
-             val->fsm_int2_b.int2_fsm16) != PROPERTY_DISABLE) {
+        if ((efi2.int2_step_detector | efi2.int2_tilt | efi2.int2_sig_mot | 
+           efi2.int2_fsm_lc | fsmA.int2_fsm1 | fsmA.int2_fsm2 | fsmA.int2_fsm3 |
+           fsmA.int2_fsm4 | fsmA.int2_fsm5 | fsmA.int2_fsm6  | fsmA.int2_fsm7  | 
+           fsmA.int2_fsm8 | fsmB.int2_fsm9 | fsmB.int2_fsm10 | fsmB.int2_fsm11 | 
+           fsmB.int2_fsm12 | fsmB.int2_fsm13 | fsmB.int2_fsm14 | 
+                       fsmB.int2_fsm15 | fsmB.int2_fsm16) != PROPERTY_DISABLE) {
             val->md2_cfg.int2_emb_func = PROPERTY_ENABLE;
         } else {
             val->md2_cfg.int2_emb_func = PROPERTY_DISABLE;
         }
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_INT2_CTRL, (u8 *)&val->int2_ctrl, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_INT2_CTRL, (u8 *)&i2c, 1);
+    }
+    lsm6dsr_md2_cfg_t md2 = val->md2_cfg;
+    if (ret == 0) {
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_MD2_CFG, (u8 *)&md2, 1);
+    }
+    lsm6dsr_tap_cfg2_t tapCfg2;
+    if (ret == 0) {
+        ret = lsm6dsr_read_reg(ctx, LSM6DSR_TAP_CFG2, (u8 *)&tapCfg2, 1);
     }
     if (ret == 0) {
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_MD2_CFG, (u8 *)&val->md2_cfg, 1);
-    }
-    if (ret == 0) {
-        ret = lsm6dsr_read_reg(ctx, LSM6DSR_TAP_CFG2, (u8 *)&tap_cfg2, 1);
-    }
-    if (ret == 0) {
-        if ((val->int2_ctrl.int2_drdy_xl | val->int2_ctrl.int2_drdy_g |
-             val->int2_ctrl.int2_drdy_temp | val->int2_ctrl.int2_fifo_th |
-             val->int2_ctrl.int2_fifo_ovr | val->int2_ctrl.int2_fifo_full |
-             val->int2_ctrl.int2_cnt_bdr | val->md2_cfg.int2_6d | val->md2_cfg.int2_double_tap |
-             val->md2_cfg.int2_ff | val->md2_cfg.int2_wu | val->md2_cfg.int2_single_tap |
-             val->md2_cfg.int2_sleep_change) != PROPERTY_DISABLE) {
-            tap_cfg2.interrupts_enable = PROPERTY_ENABLE;
+        if ((i2c.int2_drdy_xl | i2c.int2_drdy_g   | i2c.int2_drdy_temp  |
+             i2c.int2_fifo_th | i2c.int2_fifo_ovr | i2c.int2_fifo_full  |
+             i2c.int2_cnt_bdr | md2.int2_6d       | md2.int2_double_tap | 
+             md2.int2_ff      | md2.int2_wu       | md2.int2_single_tap | 
+                                md2.int2_sleep_change) != PROPERTY_DISABLE) {
+            tapCfg2.interrupts_enable = PROPERTY_ENABLE;
         } else {
-            tap_cfg2.interrupts_enable = PROPERTY_DISABLE;
+            tapCfg2.interrupts_enable = PROPERTY_DISABLE;
         }
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_TAP_CFG2, (u8 *)&tap_cfg2, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_TAP_CFG2, (u8 *)&tapCfg2, 1);
     }
     return ret;
 }
