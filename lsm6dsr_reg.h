@@ -20,18 +20,18 @@
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef LSM6DSR_REGS_H
-    #define LSM6DSR_REGS_H
+#define LSM6DSR_REGS_H
 
-    #ifdef __cplusplus
+#ifdef __cplusplus
 extern "C" {
-    #endif
+#endif
 
-    /* Includes ------------------------------------------------------------------*/
-    #include <math.h>
-    #include <stddef.h>
-    #include <stdint.h>
+/* Includes ------------------------------------------------------------------*/
+#include <math.h>
+#include <stddef.h>
+#include <stdint.h>
 
-    #include "../../include/v_config.h"     // #include "v_config.h"
+#include "../../include/v_config.h"     // #include "v_config.h"
 
 /** @addtogroup LSM6DSR
  * @{
@@ -41,28 +41,22 @@ extern "C" {
 /** @defgroup  Endianness definitions
  * @{
  *
- */
-
-    #ifndef DRV_BYTE_ORDER
-        #ifndef __BYTE_ORDER__
-
-            #define DRV_LITTLE_ENDIAN 1234
-            #define DRV_BIG_ENDIAN    4321
-
-            /** if _BYTE_ORDER is not defined, choose the endianness of your architecture
-             * by uncommenting the define which fits your platform endianness
-             */
-            //#define DRV_BYTE_ORDER    DRV_BIG_ENDIAN
-            #define DRV_BYTE_ORDER DRV_LITTLE_ENDIAN
-
-        #else /* defined __BYTE_ORDER__ */
-
-            #define DRV_LITTLE_ENDIAN __ORDER_LITTLE_ENDIAN__
-            #define DRV_BIG_ENDIAN    __ORDER_BIG_ENDIAN__
-            #define DRV_BYTE_ORDER    __BYTE_ORDER__
-
-        #endif /* __BYTE_ORDER__*/
-    #endif     /* DRV_BYTE_ORDER */
+ */ 
+#ifndef DRV_BYTE_ORDER
+    #ifndef __BYTE_ORDER__ 
+        #define DRV_LITTLE_ENDIAN 1234
+        #define DRV_BIG_ENDIAN    4321 
+        /** if _BYTE_ORDER is not defined, choose the endianness of your architecture
+         * by uncommenting the define which fits your platform endianness
+         */
+        //#define DRV_BYTE_ORDER    DRV_BIG_ENDIAN
+        #define DRV_BYTE_ORDER DRV_LITTLE_ENDIAN 
+    #else /* defined __BYTE_ORDER__ */ 
+        #define DRV_LITTLE_ENDIAN __ORDER_LITTLE_ENDIAN__
+        #define DRV_BIG_ENDIAN    __ORDER_BIG_ENDIAN__
+        #define DRV_BYTE_ORDER    __BYTE_ORDER__ 
+    #endif /* __BYTE_ORDER__*/
+#endif     /* DRV_BYTE_ORDER */
 
 /**
  * @}
@@ -74,109 +68,102 @@ extern "C" {
  *
  */
 
-    #ifndef MEMS_SHARED_TYPES
-        #define MEMS_SHARED_TYPES
+#ifndef MEMS_SHARED_TYPES
+    #define MEMS_SHARED_TYPES 
+    typedef struct {
+            #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
+        u8 bit0 : 1;
+        u8 bit1 : 1;
+        u8 bit2 : 1;
+        u8 bit3 : 1;
+        u8 bit4 : 1;
+        u8 bit5 : 1;
+        u8 bit6 : 1;
+        u8 bit7 : 1;
+            #elif DRV_BYTE_ORDER == DRV_BIG_ENDIAN
+        u8 bit7 : 1;
+        u8 bit6 : 1;
+        u8 bit5 : 1;
+        u8 bit4 : 1;
+        u8 bit3 : 1;
+        u8 bit2 : 1;
+        u8 bit1 : 1;
+        u8 bit0 : 1;
+            #endif /* DRV_BYTE_ORDER */
+    } bitwise_t;
 
-typedef struct {
-        #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
-    u8 bit0 : 1;
-    u8 bit1 : 1;
-    u8 bit2 : 1;
-    u8 bit3 : 1;
-    u8 bit4 : 1;
-    u8 bit5 : 1;
-    u8 bit6 : 1;
-    u8 bit7 : 1;
-        #elif DRV_BYTE_ORDER == DRV_BIG_ENDIAN
-    u8 bit7 : 1;
-    u8 bit6 : 1;
-    u8 bit5 : 1;
-    u8 bit4 : 1;
-    u8 bit3 : 1;
-    u8 bit2 : 1;
-    u8 bit1 : 1;
-    u8 bit0 : 1;
-        #endif /* DRV_BYTE_ORDER */
-} bitwise_t;
+    #define PROPERTY_DISABLE (0U)
+    #define PROPERTY_ENABLE  (1U)
 
-        #define PROPERTY_DISABLE (0U)
-        #define PROPERTY_ENABLE  (1U)
-
-/** @addtogroup  Interfaces_Functions
- * @brief       This section provide a set of functions used to read and
- *              write a generic register of the device.
- *              MANDATORY: return 0 -> no Error.
- * @{
- *
- */
-
-typedef i32 (*stmdev_write_ptr)(void *, u8, const u8 *, u16);
-typedef i32 (*stmdev_read_ptr)(void *, u8, u8 *, u16);
-
-typedef struct {
-    /** Component mandatory fields **/
-    stmdev_write_ptr write_reg;
-    stmdev_read_ptr  read_reg;
-    /** Customizable optional pointer **/
-    void *handle;
-} stmdev_ctx_t;
-
-    /**
-     * @}
-     *
-     */
-
-    #endif /* MEMS_SHARED_TYPES */
-
-    #ifndef MEMS_UCF_SHARED_TYPES
-        #define MEMS_UCF_SHARED_TYPES
-
-/** @defgroup    Generic address-data structure definition
- * @brief       This structure is useful to load a predefined configuration
- *              of a sensor.
- *              You can create a sensor configuration by your own or using
- *              Unico / Unicleo tools available on STMicroelectronics
- *              web site.
- *
- * @{
- *
- */
-
-typedef struct {
-    u8 address;
-    u8 data;
-} ucf_line_t;
-
-    /**
-     * @}
-     *
-     */
-
-    #endif /* MEMS_UCF_SHARED_TYPES */
-
-    /**
-     * @}
-     *
-     */
-
-    /** @defgroup LSM6DSR Infos
+    /** @addtogroup  Interfaces_Functions
+     * @brief       This section provide a set of functions used to read and
+     *              write a generic register of the device.
+     *              MANDATORY: return 0 -> no Error.
      * @{
      *
+     */ 
+    typedef i32 (*stmdev_write_ptr)(void *, u8, const u8 *, u16);
+    typedef i32 (*stmdev_read_ptr)(void *, u8, u8 *, u16);
+
+    typedef struct {
+        /** Component mandatory fields **/
+        stmdev_write_ptr write_reg;
+        stmdev_read_ptr  read_reg;
+        /** Customizable optional pointer **/
+        void *handle;
+    } stmdev_ctx_t;
+
+    /**
+     * @}
+     *
      */
 
-    /** I2C Device Address 8 bit format  if SA0=0 -> D5 if SA0=1 -> D7 **/
-    #define LSM6DSR_I2C_ADD_L 0xD5U
-    #define LSM6DSR_I2C_ADD_H 0xD7U
+#endif /* MEMS_SHARED_TYPES */
 
-    /** Device Identification (Who am I) **/
-    #define LSM6DSR_ID 0x6BU
+#ifndef MEMS_UCF_SHARED_TYPES
+#define MEMS_UCF_SHARED_TYPES
+
+    /** @defgroup    Generic address-data structure definition
+     * @brief       This structure is useful to load a predefined configuration
+     *              of a sensor.
+     *              You can create a sensor configuration by your own or using
+     *              Unico / Unicleo tools available on STMicroelectronics
+     *              web site.
+     *
+     * @{
+     *
+     */ 
+    typedef struct {
+        u8 address;
+        u8 data;
+    } ucf_line_t; 
+    /**
+     * @}
+     *
+     */ 
+#endif /* MEMS_UCF_SHARED_TYPES */ 
+/**
+ * @}
+ *
+ */ 
+/** @defgroup LSM6DSR Infos
+ * @{
+ *
+ */
+
+/** I2C Device Address 8 bit format  if SA0=0 -> D5 if SA0=1 -> D7 **/
+#define LSM6DSR_I2C_ADD_L 0xD5U
+#define LSM6DSR_I2C_ADD_H 0xD7U
+
+/** Device Identification (Who am I) **/
+#define LSM6DSR_ID 0x6BU
 
 /**
  * @}
  *
  */
 
-    #define LSM6DSR_FUNC_CFG_ACCESS 0x01U
+#define LSM6DSR_FUNC_CFG_ACCESS 0x01U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 not_used_01 : 6;
@@ -572,7 +559,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_wake_up_src_t;
 
-    #define LSM6DSR_TAP_SRC 0x1CU
+#define LSM6DSR_TAP_SRC 0x1CU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 z_tap : 1;
@@ -595,7 +582,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_tap_src_t;
 
-    #define LSM6DSR_D6D_SRC 0x1DU
+#define LSM6DSR_D6D_SRC 0x1DU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 xl : 1;
@@ -648,21 +635,21 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_status_spiaux_t;
 
-    #define LSM6DSR_OUT_TEMP_L               0x20U
-    #define LSM6DSR_OUT_TEMP_H               0x21U
-    #define LSM6DSR_OUTX_L_G                 0x22U
-    #define LSM6DSR_OUTX_H_G                 0x23U
-    #define LSM6DSR_OUTY_L_G                 0x24U
-    #define LSM6DSR_OUTY_H_G                 0x25U
-    #define LSM6DSR_OUTZ_L_G                 0x26U
-    #define LSM6DSR_OUTZ_H_G                 0x27U
-    #define LSM6DSR_OUTX_L_A                 0x28U
-    #define LSM6DSR_OUTX_H_A                 0x29U
-    #define LSM6DSR_OUTY_L_A                 0x2AU
-    #define LSM6DSR_OUTY_H_A                 0x2BU
-    #define LSM6DSR_OUTZ_L_A                 0x2CU
-    #define LSM6DSR_OUTZ_H_A                 0x2DU
-    #define LSM6DSR_EMB_FUNC_STATUS_MAINPAGE 0x35U
+#define LSM6DSR_OUT_TEMP_L               0x20U
+#define LSM6DSR_OUT_TEMP_H               0x21U
+#define LSM6DSR_OUTX_L_G                 0x22U
+#define LSM6DSR_OUTX_H_G                 0x23U
+#define LSM6DSR_OUTY_L_G                 0x24U
+#define LSM6DSR_OUTY_H_G                 0x25U
+#define LSM6DSR_OUTZ_L_G                 0x26U
+#define LSM6DSR_OUTZ_H_G                 0x27U
+#define LSM6DSR_OUTX_L_A                 0x28U
+#define LSM6DSR_OUTX_H_A                 0x29U
+#define LSM6DSR_OUTY_L_A                 0x2AU
+#define LSM6DSR_OUTY_H_A                 0x2BU
+#define LSM6DSR_OUTZ_L_A                 0x2CU
+#define LSM6DSR_OUTZ_H_A                 0x2DU
+#define LSM6DSR_EMB_FUNC_STATUS_MAINPAGE 0x35U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 not_used_01 : 3;
@@ -681,7 +668,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_emb_func_status_mainpage_t;
 
-    #define LSM6DSR_FSM_STATUS_A_MAINPAGE 0x36U
+#define LSM6DSR_FSM_STATUS_A_MAINPAGE 0x36U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 is_fsm1 : 1;
@@ -704,7 +691,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_status_a_mainpage_t;
 
-    #define LSM6DSR_FSM_STATUS_B_MAINPAGE 0x37U
+#define LSM6DSR_FSM_STATUS_B_MAINPAGE 0x37U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 is_fsm9 : 1;
@@ -748,7 +735,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_status_master_mainpage_t;
 
-    #define LSM6DSR_FIFO_STATUS1 0x3AU
+#define LSM6DSR_FIFO_STATUS1 0x3AU
 typedef struct {
     u8 diff_fifo : 8;
 } lsm6dsr_fifo_status1_t;
@@ -774,11 +761,11 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fifo_status2_t;
 
-    #define LSM6DSR_TIMESTAMP0 0x40U
-    #define LSM6DSR_TIMESTAMP1 0x41U
-    #define LSM6DSR_TIMESTAMP2 0x42U
-    #define LSM6DSR_TIMESTAMP3 0x43U
-    #define LSM6DSR_TAP_CFG0   0x56U
+#define LSM6DSR_TIMESTAMP0 0x40U
+#define LSM6DSR_TIMESTAMP1 0x41U
+#define LSM6DSR_TIMESTAMP2 0x42U
+#define LSM6DSR_TIMESTAMP3 0x43U
+#define LSM6DSR_TAP_CFG0   0x56U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 lir : 1;
@@ -801,7 +788,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_tap_cfg0_t;
 
-    #define LSM6DSR_TAP_CFG1 0x57U
+#define LSM6DSR_TAP_CFG1 0x57U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 tap_ths_x : 5;
@@ -812,7 +799,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_tap_cfg1_t;
 
-    #define LSM6DSR_TAP_CFG2 0x58U
+#define LSM6DSR_TAP_CFG2 0x58U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 tap_ths_y : 5;
@@ -825,7 +812,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_tap_cfg2_t;
 
-    #define LSM6DSR_TAP_THS_6D 0x59U
+#define LSM6DSR_TAP_THS_6D 0x59U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 tap_ths_z : 5;
@@ -838,7 +825,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_tap_ths_6d_t;
 
-    #define LSM6DSR_INT_DUR2 0x5AU
+#define LSM6DSR_INT_DUR2 0x5AU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 shock : 2;
@@ -851,7 +838,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_int_dur2_t;
 
-    #define LSM6DSR_WAKE_UP_THS 0x5BU
+#define LSM6DSR_WAKE_UP_THS 0x5BU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 wk_ths : 6;
@@ -864,7 +851,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_wake_up_ths_t;
 
-    #define LSM6DSR_WAKE_UP_DUR 0x5CU
+#define LSM6DSR_WAKE_UP_DUR 0x5CU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 sleep_dur : 4;
@@ -879,7 +866,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_wake_up_dur_t;
 
-    #define LSM6DSR_FREE_FALL 0x5DU
+#define LSM6DSR_FREE_FALL 0x5DU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 ff_ths : 3;
@@ -890,7 +877,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_free_fall_t;
 
-    #define LSM6DSR_MD1_CFG 0x5EU
+#define LSM6DSR_MD1_CFG 0x5EU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 int1_shub : 1;
@@ -913,7 +900,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_md1_cfg_t;
 
-    #define LSM6DSR_MD2_CFG 0x5FU
+#define LSM6DSR_MD2_CFG 0x5FU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 int2_timestamp : 1;
@@ -936,17 +923,17 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_md2_cfg_t;
 
-    #define LSM6DSR_S4S_ST_CMD_CODE 0x60U
+#define LSM6DSR_S4S_ST_CMD_CODE 0x60U
 typedef struct {
     u8 s4s_st_cmd_code : 8;
 } lsm6dsr_s4s_st_cmd_code_t;
 
-    #define LSM6DSR_S4S_DT_REG 0x61U
+#define LSM6DSR_S4S_DT_REG 0x61U
 typedef struct {
     u8 dt : 8;
 } lsm6dsr_s4s_dt_reg_t;
 
-    #define LSM6DSR_I3C_BUS_AVB 0x62U
+#define LSM6DSR_I3C_BUS_AVB 0x62U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 pd_dis_int1 : 1;
@@ -961,12 +948,12 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_i3c_bus_avb_t;
 
-    #define LSM6DSR_INTERNAL_FREQ_FINE 0x63U
+#define LSM6DSR_INTERNAL_FREQ_FINE 0x63U
 typedef struct {
     u8 freq_fine : 8;
 } lsm6dsr_internal_freq_fine_t;
 
-    #define LSM6DSR_INT_OIS 0x6FU
+#define LSM6DSR_INT_OIS 0x6FU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 st_xl_ois : 2;
@@ -983,7 +970,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_int_ois_t;
 
-    #define LSM6DSR_CTRL1_OIS 0x70U
+#define LSM6DSR_CTRL1_OIS 0x70U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 ois_en_spi2 : 1;
@@ -1004,7 +991,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_ctrl1_ois_t;
 
-    #define LSM6DSR_CTRL2_OIS 0x71U
+#define LSM6DSR_CTRL2_OIS 0x71U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 hp_en_ois : 1;
@@ -1021,7 +1008,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_ctrl2_ois_t;
 
-    #define LSM6DSR_CTRL3_OIS 0x72U
+#define LSM6DSR_CTRL3_OIS 0x72U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 st_ois_clampdis : 1;
@@ -1036,10 +1023,10 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_ctrl3_ois_t;
 
-    #define LSM6DSR_X_OFS_USR         0x73U
-    #define LSM6DSR_Y_OFS_USR         0x74U
-    #define LSM6DSR_Z_OFS_USR         0x75U
-    #define LSM6DSR_FIFO_DATA_OUT_TAG 0x78U
+#define LSM6DSR_X_OFS_USR         0x73U
+#define LSM6DSR_Y_OFS_USR         0x74U
+#define LSM6DSR_Z_OFS_USR         0x75U
+#define LSM6DSR_FIFO_DATA_OUT_TAG 0x78U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 tag_parity : 1;
@@ -1052,13 +1039,13 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fifo_data_out_tag_t;
 
-    #define LSM6DSR_FIFO_DATA_OUT_X_L 0x79U
-    #define LSM6DSR_FIFO_DATA_OUT_X_H 0x7AU
-    #define LSM6DSR_FIFO_DATA_OUT_Y_L 0x7BU
-    #define LSM6DSR_FIFO_DATA_OUT_Y_H 0x7CU
-    #define LSM6DSR_FIFO_DATA_OUT_Z_L 0x7DU
-    #define LSM6DSR_FIFO_DATA_OUT_Z_H 0x7EU
-    #define LSM6DSR_PAGE_SEL          0x02U
+#define LSM6DSR_FIFO_DATA_OUT_X_L 0x79U
+#define LSM6DSR_FIFO_DATA_OUT_X_H 0x7AU
+#define LSM6DSR_FIFO_DATA_OUT_Y_L 0x7BU
+#define LSM6DSR_FIFO_DATA_OUT_Y_H 0x7CU
+#define LSM6DSR_FIFO_DATA_OUT_Z_L 0x7DU
+#define LSM6DSR_FIFO_DATA_OUT_Z_H 0x7EU
+#define LSM6DSR_PAGE_SEL          0x02U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 not_used_01 : 4;
@@ -1069,7 +1056,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_page_sel_t;
 
-    #define LSM6DSR_ADV_PEDO 0x03U
+#define LSM6DSR_ADV_PEDO 0x03U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 not_used_01 : 1;
@@ -1082,7 +1069,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_adv_pedo_t;
 
-    #define LSM6DSR_EMB_FUNC_EN_A 0x04U
+#define LSM6DSR_EMB_FUNC_EN_A 0x04U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 not_used_01 : 3;
@@ -1099,7 +1086,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_emb_func_en_a_t;
 
-    #define LSM6DSR_EMB_FUNC_EN_B 0x05U
+#define LSM6DSR_EMB_FUNC_EN_B 0x05U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 fsm_en : 1;
@@ -1116,17 +1103,17 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_emb_func_en_b_t;
 
-    #define LSM6DSR_PAGE_ADDRESS 0x08U
+#define LSM6DSR_PAGE_ADDRESS 0x08U
 typedef struct {
     u8 page_addr : 8;
 } lsm6dsr_page_address_t;
 
-    #define LSM6DSR_PAGE_VALUE 0x09U
+#define LSM6DSR_PAGE_VALUE 0x09U
 typedef struct {
     u8 page_value : 8;
 } lsm6dsr_page_value_t;
 
-    #define LSM6DSR_EMB_FUNC_INT1 0x0AU
+#define LSM6DSR_EMB_FUNC_INT1 0x0AU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 not_used_01 : 3;
@@ -1145,7 +1132,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_emb_func_int1_t;
 
-    #define LSM6DSR_FSM_INT1_A 0x0BU
+#define LSM6DSR_FSM_INT1_A 0x0BU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 int1_fsm1 : 1;
@@ -1168,7 +1155,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_int1_a_t;
 
-    #define LSM6DSR_FSM_INT1_B 0x0CU
+#define LSM6DSR_FSM_INT1_B 0x0CU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 int1_fsm9 : 1;
@@ -1191,15 +1178,15 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_int1_b_t;
 
-    #define LSM6DSR_EMB_FUNC_INT2 0x0EU
+#define LSM6DSR_EMB_FUNC_INT2 0x0EU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 not_used_01 : 3;
     u8 int2_step_detector : 1;
     u8 int2_tilt : 1;
-    u8 int2_sig_mot : 1;
+    u8 int2_sig_mot : 1;  /** Significant motion. */
     u8 not_used_02 : 1;
-    u8 int2_fsm_lc : 1;
+    u8 int2_fsm_lc : 1;   /** FiniteStateMachine LongCounter. */
     #elif DRV_BYTE_ORDER == DRV_BIG_ENDIAN
     u8 int2_fsm_lc : 1;
     u8 not_used_02 : 1;
@@ -1210,7 +1197,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_emb_func_int2_t;
 
-    #define LSM6DSR_FSM_INT2_A 0x0FU
+#define LSM6DSR_FSM_INT2_A 0x0FU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 int2_fsm1 : 1;
@@ -1233,7 +1220,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_int2_a_t;
 
-    #define LSM6DSR_FSM_INT2_B 0x10U
+#define LSM6DSR_FSM_INT2_B 0x10U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 int2_fsm9 : 1;
@@ -1256,7 +1243,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_int2_b_t;
 
-    #define LSM6DSR_EMB_FUNC_STATUS 0x12U
+#define LSM6DSR_EMB_FUNC_STATUS 0x12U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 not_used_01 : 3;
@@ -1275,7 +1262,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_emb_func_status_t;
 
-    #define LSM6DSR_FSM_STATUS_A 0x13U
+#define LSM6DSR_FSM_STATUS_A 0x13U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 is_fsm1 : 1;
@@ -1298,7 +1285,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_status_a_t;
 
-    #define LSM6DSR_FSM_STATUS_B 0x14U
+#define LSM6DSR_FSM_STATUS_B 0x14U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 is_fsm9 : 1;
@@ -1321,7 +1308,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_status_b_t;
 
-    #define LSM6DSR_PAGE_RW 0x17U
+#define LSM6DSR_PAGE_RW 0x17U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 not_used_01 : 5;
@@ -1334,7 +1321,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_page_rw_t;
 
-    #define LSM6DSR_EMB_FUNC_FIFO_CFG 0x44U
+#define LSM6DSR_EMB_FUNC_FIFO_CFG 0x44U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 not_used_01 : 6;
@@ -1347,7 +1334,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_emb_func_fifo_cfg_t;
 
-    #define LSM6DSR_FSM_ENABLE_A 0x46U
+#define LSM6DSR_FSM_ENABLE_A 0x46U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 fsm1_en : 1;
@@ -1370,7 +1357,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_enable_a_t;
 
-    #define LSM6DSR_FSM_ENABLE_B 0x47U
+#define LSM6DSR_FSM_ENABLE_B 0x47U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 fsm9_en : 1;
@@ -1393,9 +1380,9 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_enable_b_t;
 
-    #define LSM6DSR_FSM_LONG_COUNTER_L     0x48U
-    #define LSM6DSR_FSM_LONG_COUNTER_H     0x49U
-    #define LSM6DSR_FSM_LONG_COUNTER_CLEAR 0x4AU
+#define LSM6DSR_FSM_LONG_COUNTER_L     0x48U
+#define LSM6DSR_FSM_LONG_COUNTER_H     0x49U
+#define LSM6DSR_FSM_LONG_COUNTER_CLEAR 0x4AU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 fsm_lc_clr : 2; /* fsm_lc_cleared + fsm_lc_clear */
@@ -1406,7 +1393,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_long_counter_clear_t;
 
-    #define LSM6DSR_FSM_OUTS1 0x4CU
+#define LSM6DSR_FSM_OUTS1 0x4CU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1429,7 +1416,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs1_t;
 
-    #define LSM6DSR_FSM_OUTS2 0x4DU
+#define LSM6DSR_FSM_OUTS2 0x4DU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1452,7 +1439,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs2_t;
 
-    #define LSM6DSR_FSM_OUTS3 0x4EU
+#define LSM6DSR_FSM_OUTS3 0x4EU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1475,7 +1462,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs3_t;
 
-    #define LSM6DSR_FSM_OUTS4 0x4FU
+#define LSM6DSR_FSM_OUTS4 0x4FU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1498,7 +1485,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs4_t;
 
-    #define LSM6DSR_FSM_OUTS5 0x50U
+#define LSM6DSR_FSM_OUTS5 0x50U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1521,7 +1508,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs5_t;
 
-    #define LSM6DSR_FSM_OUTS6 0x51U
+#define LSM6DSR_FSM_OUTS6 0x51U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1544,7 +1531,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs6_t;
 
-    #define LSM6DSR_FSM_OUTS7 0x52U
+#define LSM6DSR_FSM_OUTS7 0x52U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1567,7 +1554,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs7_t;
 
-    #define LSM6DSR_FSM_OUTS8 0x53U
+#define LSM6DSR_FSM_OUTS8 0x53U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1590,7 +1577,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs8_t;
 
-    #define LSM6DSR_FSM_OUTS9 0x54U
+#define LSM6DSR_FSM_OUTS9 0x54U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1613,7 +1600,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs9_t;
 
-    #define LSM6DSR_FSM_OUTS10 0x55U
+#define LSM6DSR_FSM_OUTS10 0x55U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1636,7 +1623,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs10_t;
 
-    #define LSM6DSR_FSM_OUTS11 0x56U
+#define LSM6DSR_FSM_OUTS11 0x56U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1659,7 +1646,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs11_t;
 
-    #define LSM6DSR_FSM_OUTS12 0x57U
+#define LSM6DSR_FSM_OUTS12 0x57U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1682,7 +1669,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs12_t;
 
-    #define LSM6DSR_FSM_OUTS13 0x58U
+#define LSM6DSR_FSM_OUTS13 0x58U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1705,7 +1692,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs13_t;
 
-    #define LSM6DSR_FSM_OUTS14 0x59U
+#define LSM6DSR_FSM_OUTS14 0x59U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1728,7 +1715,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs14_t;
 
-    #define LSM6DSR_FSM_OUTS15 0x5AU
+#define LSM6DSR_FSM_OUTS15 0x5AU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1751,7 +1738,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs15_t;
 
-    #define LSM6DSR_FSM_OUTS16 0x5BU
+#define LSM6DSR_FSM_OUTS16 0x5BU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 n_v : 1;
@@ -1774,7 +1761,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_fsm_outs16_t;
 
-    #define LSM6DSR_EMB_FUNC_ODR_CFG_B 0x5FU
+#define LSM6DSR_EMB_FUNC_ODR_CFG_B 0x5FU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 not_used_01 : 3;
@@ -1787,9 +1774,9 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_emb_func_odr_cfg_b_t;
 
-    #define LSM6DSR_STEP_COUNTER_L 0x62U
-    #define LSM6DSR_STEP_COUNTER_H 0x63U
-    #define LSM6DSR_EMB_FUNC_SRC   0x64U
+#define LSM6DSR_STEP_COUNTER_L 0x62U
+#define LSM6DSR_STEP_COUNTER_H 0x63U
+#define LSM6DSR_EMB_FUNC_SRC   0x64U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 not_used_01 : 2;
@@ -1810,7 +1797,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_emb_func_src_t;
 
-    #define LSM6DSR_EMB_FUNC_INIT_A 0x66U
+#define LSM6DSR_EMB_FUNC_INIT_A 0x66U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 not_used_01 : 3;
@@ -1827,7 +1814,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_emb_func_init_a_t;
 
-    #define LSM6DSR_EMB_FUNC_INIT_B 0x67U
+#define LSM6DSR_EMB_FUNC_INIT_B 0x67U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 fsm_init : 1;
@@ -1936,7 +1923,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_1_t;
 
-    #define LSM6DSR_SENSOR_HUB_2 0x03U
+#define LSM6DSR_SENSOR_HUB_2 0x03U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -1959,7 +1946,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_2_t;
 
-    #define LSM6DSR_SENSOR_HUB_3 0x04U
+#define LSM6DSR_SENSOR_HUB_3 0x04U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -1982,7 +1969,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_3_t;
 
-    #define LSM6DSR_SENSOR_HUB_4 0x05U
+#define LSM6DSR_SENSOR_HUB_4 0x05U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2005,7 +1992,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_4_t;
 
-    #define LSM6DSR_SENSOR_HUB_5 0x06U
+#define LSM6DSR_SENSOR_HUB_5 0x06U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2028,7 +2015,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_5_t;
 
-    #define LSM6DSR_SENSOR_HUB_6 0x07U
+#define LSM6DSR_SENSOR_HUB_6 0x07U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2051,7 +2038,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_6_t;
 
-    #define LSM6DSR_SENSOR_HUB_7 0x08U
+#define LSM6DSR_SENSOR_HUB_7 0x08U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2074,7 +2061,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_7_t;
 
-    #define LSM6DSR_SENSOR_HUB_8 0x09U
+#define LSM6DSR_SENSOR_HUB_8 0x09U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2097,7 +2084,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_8_t;
 
-    #define LSM6DSR_SENSOR_HUB_9 0x0AU
+#define LSM6DSR_SENSOR_HUB_9 0x0AU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2120,7 +2107,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_9_t;
 
-    #define LSM6DSR_SENSOR_HUB_10 0x0BU
+#define LSM6DSR_SENSOR_HUB_10 0x0BU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2143,7 +2130,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_10_t;
 
-    #define LSM6DSR_SENSOR_HUB_11 0x0CU
+#define LSM6DSR_SENSOR_HUB_11 0x0CU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2166,7 +2153,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_11_t;
 
-    #define LSM6DSR_SENSOR_HUB_12 0x0DU
+#define LSM6DSR_SENSOR_HUB_12 0x0DU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2189,7 +2176,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_12_t;
 
-    #define LSM6DSR_SENSOR_HUB_13 0x0EU
+#define LSM6DSR_SENSOR_HUB_13 0x0EU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2212,7 +2199,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_13_t;
 
-    #define LSM6DSR_SENSOR_HUB_14 0x0FU
+#define LSM6DSR_SENSOR_HUB_14 0x0FU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2235,7 +2222,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_14_t;
 
-    #define LSM6DSR_SENSOR_HUB_15 0x10U
+#define LSM6DSR_SENSOR_HUB_15 0x10U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2258,7 +2245,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_15_t;
 
-    #define LSM6DSR_SENSOR_HUB_16 0x11U
+#define LSM6DSR_SENSOR_HUB_16 0x11U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2281,7 +2268,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_16_t;
 
-    #define LSM6DSR_SENSOR_HUB_17 0x12U
+#define LSM6DSR_SENSOR_HUB_17 0x12U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2304,7 +2291,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_sensor_hub_17_t;
 
-    #define LSM6DSR_SENSOR_HUB_18 0x13U
+#define LSM6DSR_SENSOR_HUB_18 0x13U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 bit0 : 1;
@@ -2408,7 +2395,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_slv1_config_t;
 
-    #define LSM6DSR_SLV2_ADD 0x1BU
+#define LSM6DSR_SLV2_ADD 0x1BU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 r_2 : 1;
@@ -2419,12 +2406,12 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_slv2_add_t;
 
-    #define LSM6DSR_SLV2_SUBADD 0x1CU
+#define LSM6DSR_SLV2_SUBADD 0x1CU
 typedef struct {
     u8 slave2_reg : 8;
 } lsm6dsr_slv2_subadd_t;
 
-    #define LSM6DSR_SLV2_CONFIG 0x1DU
+#define LSM6DSR_SLV2_CONFIG 0x1DU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 slave2_numop : 3;
@@ -2437,7 +2424,7 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_slv2_config_t;
 
-    #define LSM6DSR_SLV3_ADD 0x1EU
+#define LSM6DSR_SLV3_ADD 0x1EU
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 r_3 : 1;
@@ -2448,12 +2435,12 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_slv3_add_t;
 
-    #define LSM6DSR_SLV3_SUBADD 0x1FU
+#define LSM6DSR_SLV3_SUBADD 0x1FU
 typedef struct {
     u8 slave3_reg : 8;
 } lsm6dsr_slv3_subadd_t;
 
-    #define LSM6DSR_SLV3_CONFIG 0x20U
+#define LSM6DSR_SLV3_CONFIG 0x20U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 slave3_numop : 3;
@@ -2466,12 +2453,12 @@ typedef struct {
     #endif /* DRV_BYTE_ORDER */
 } lsm6dsr_slv3_config_t;
 
-    #define LSM6DSR_DATAWRITE_SLV0 0x21U
+#define LSM6DSR_DATAWRITE_SLV0 0x21U
 typedef struct {
     u8 slave0_dataw : 8;
 } lsm6dsr_datawrite_slv0_t;
 
-    #define LSM6DSR_STATUS_MASTER 0x22U
+#define LSM6DSR_STATUS_MASTER 0x22U
 typedef struct {
     #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
     u8 sens_hub_endop : 1;

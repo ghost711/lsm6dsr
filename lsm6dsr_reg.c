@@ -73,6 +73,10 @@ i32 lsm6dsr_write_reg(stmdev_ctx_t *ctx, u8 reg, u8 *data, u16 len) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_Sensitivity__________________________________________________;
+#endif
+
 /**
  * @defgroup    LSM6DSR_Sensitivity
  * @brief       These functions convert raw-data into engineering units.
@@ -129,6 +133,9 @@ float_t lsm6dsr_from_lsb_to_nsec(i32 lsb) {
  *
  */
 
+#if 0 
+u8 _______Scale_And_ODR________________________________________________________;
+#endif
 /**
  * @brief  Accelerometer full-scale selection[set]
  *
@@ -427,6 +434,9 @@ i32 lsm6dsr_gy_data_rate_get(stmdev_ctx_t *ctx, lsm6dsr_odr_g_t *val) {
     return ret;
 }
 
+#if 0 
+u8 _______CTRL3_C___BDU_etc_________________________________________________________________;
+#endif
 /**
  * @brief  Block data update.[set]
  *
@@ -460,6 +470,9 @@ i32 lsm6dsr_block_data_update_get(stmdev_ctx_t *ctx, u8 *val) {
     return ret;
 }
 
+#if 0 
+u8 _______CTRL6_C___XL_Offsets_PowerMode_etc______________________________________;
+#endif
 /**
  * @brief  Weight of XL user offset bits of registers X_OFS_USR (73h),
  *         Y_OFS_USR (74h), Z_OFS_USR (75h).[set]
@@ -535,7 +548,10 @@ i32 lsm6dsr_xl_power_mode_get(stmdev_ctx_t *ctx, lsm6dsr_xl_hm_mode_t *val) {
     }
     return ret;
 }
-
+ 
+#if 0 
+u8 _______CTRL7_G___GY_PowerMode_etc___________________________________________;
+#endif
 /**
  * @brief  Operating mode for gyroscope.[set]
  *
@@ -573,6 +589,9 @@ i32 lsm6dsr_gy_power_mode_get(stmdev_ctx_t *ctx, lsm6dsr_g_hm_mode_t *val) {
     return ret;
 }
 
+#if 0 
+u8 _______ALL_INT_SRC_etc___________________________________________________________;
+#endif
 /**
  * @brief  Read all the interrupt flag of the device.
  *[get]
@@ -616,6 +635,9 @@ i32 lsm6dsr_all_sources_get(stmdev_ctx_t *ctx, lsm6dsr_all_sources_t *val) {
   return ret;
 }
 
+#if 0 
+u8 _______STATUS_REG___________________________________________________________;
+#endif
 /**
  * @brief  The STATUS_REG register is read by the primary interface.[get]
  *
@@ -674,6 +696,9 @@ i32 lsm6dsr_temp_flag_data_ready_get(stmdev_ctx_t *ctx, u8 *val) {
     return ret;
 }
 
+#if 0 
+u8 _______X_OFS_USR__XL_Offsets________________________________________________;
+#endif
 /**
  * @brief  Accelerometer X-axis user offset correction expressed in two’s
  *         complement, weight depends on USR_OFF_W in CTRL6_C (15h).
@@ -764,6 +789,9 @@ i32 lsm6dsr_xl_usr_offset_z_get(stmdev_ctx_t *ctx, u8 *buff) {
     return ret;
 }
 
+#if 0 
+u8 _______CTRL7_G__Offset_Apply_Enables________________________________________;
+#endif
 /**
  * @brief  Enables user offset on out.[set]
  *
@@ -777,7 +805,7 @@ i32 lsm6dsr_xl_usr_offset_set(stmdev_ctx_t *ctx, u8 val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL7_G, (u8 *)&ctrl7_g, 1);
     if (ret == 0) {
         ctrl7_g.usr_off_on_out = (u8)val;
-        ret                    = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL7_G, (u8 *)&ctrl7_g, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL7_G, (u8 *)&ctrl7_g, 1);
     }
     return ret;
 }
@@ -810,6 +838,9 @@ i32 lsm6dsr_xl_usr_offset_get(stmdev_ctx_t *ctx, u8 *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_Timestamp____________________________________________________;
+#endif
 /**
  * @brief  Reset timestamp counter.[set]
  *
@@ -889,6 +920,10 @@ i32 lsm6dsr_timestamp_raw_get(stmdev_ctx_t *ctx, u32 *val) {
  *
  */
 
+
+#if 0 
+u8 _______LSM6DSR_Data_Output__________________________________________________;
+#endif
 /**
  * @brief  Circular burst-mode (rounding) read of the output registers.[set]
  *
@@ -902,7 +937,7 @@ i32 lsm6dsr_rounding_mode_set(stmdev_ctx_t *ctx, lsm6dsr_rounding_t val) {
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_CTRL5_C, (u8 *)&ctrl5_c, 1);
     if (ret == 0) {
         ctrl5_c.rounding = (u8)val;
-        ret              = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL5_C, (u8 *)&ctrl5_c, 1);
+        ret = lsm6dsr_write_reg(ctx, LSM6DSR_CTRL5_C, (u8 *)&ctrl5_c, 1);
     }
     return ret;
 }
@@ -940,9 +975,7 @@ i32 lsm6dsr_rounding_mode_get(stmdev_ctx_t *ctx, lsm6dsr_rounding_t *val) {
  */
 i32 lsm6dsr_temperature_raw_get(stmdev_ctx_t *ctx, i16 *val) {
     u8 buff[2];
-    i32 ret;
-
-    ret    = lsm6dsr_read_reg(ctx, LSM6DSR_OUT_TEMP_L, buff, 2);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_OUT_TEMP_L, buff, 2);
     val[0] = (i16)buff[1];
     val[0] = (val[0] * 256) + (i16)buff[0];
     return ret;
@@ -959,9 +992,7 @@ i32 lsm6dsr_temperature_raw_get(stmdev_ctx_t *ctx, i16 *val) {
  */
 i32 lsm6dsr_angular_rate_raw_get(stmdev_ctx_t *ctx, i16 *val) {
     u8 buff[6];
-    i32 ret;
-
-    ret    = lsm6dsr_read_reg(ctx, LSM6DSR_OUTX_L_G, buff, 6);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_OUTX_L_G, buff, 6);
     val[0] = (i16)buff[1];
     val[0] = (val[0] * 256) + (i16)buff[0];
     val[1] = (i16)buff[3];
@@ -982,9 +1013,7 @@ i32 lsm6dsr_angular_rate_raw_get(stmdev_ctx_t *ctx, i16 *val) {
  */
 i32 lsm6dsr_acceleration_raw_get(stmdev_ctx_t *ctx, i16 *val) {
     u8 buff[6];
-    i32 ret;
-
-    ret    = lsm6dsr_read_reg(ctx, LSM6DSR_OUTX_L_A, buff, 6);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_OUTX_L_A, buff, 6);
     val[0] = (i16)buff[1];
     val[0] = (val[0] * 256) + (i16)buff[0];
     val[1] = (i16)buff[3];
@@ -1063,6 +1092,9 @@ i32 lsm6dsr_steps_reset(stmdev_ctx_t *ctx) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_Common_______________________________________________________;
+#endif
 /**
  * @brief  Difference in percentage of the effective ODR (and timestamp rate)
  *         with respect to the typical.[set]
@@ -1323,9 +1355,7 @@ i32 lsm6dsr_ln_pg_read_byte(stmdev_ctx_t *ctx, u16 add, u8 *val) {
  */
 i32 lsm6dsr_data_ready_mode_set(stmdev_ctx_t *ctx, lsm6dsr_dataready_pulsed_t val) {
     lsm6dsr_counter_bdr_reg1_t counter_bdr_reg1;
-    i32                    ret;
-
-    ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
     if (ret == 0) {
         counter_bdr_reg1.dataready_pulsed = (u8)val;
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
@@ -1344,9 +1374,7 @@ i32 lsm6dsr_data_ready_mode_set(stmdev_ctx_t *ctx, lsm6dsr_dataready_pulsed_t va
  */
 i32 lsm6dsr_data_ready_mode_get(stmdev_ctx_t *ctx, lsm6dsr_dataready_pulsed_t *val) {
     lsm6dsr_counter_bdr_reg1_t counter_bdr_reg1;
-    i32                    ret;
-
-    ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
     switch (counter_bdr_reg1.dataready_pulsed) {
     case LSM6DSR_DRDY_LATCHED: *val = LSM6DSR_DRDY_LATCHED; break;
     case LSM6DSR_DRDY_PULSED: *val = LSM6DSR_DRDY_PULSED; break;
@@ -1557,6 +1585,9 @@ i32 lsm6dsr_gy_self_test_get(stmdev_ctx_t *ctx, lsm6dsr_st_g_t *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_filters_______________________________________________________;
+#endif
 /**
  * @brief  Accelerometer output from LPF2 filtering stage selection.[set]
  *
@@ -1930,6 +1961,9 @@ i32 lsm6dsr_gy_hp_path_internal_get(stmdev_ctx_t *ctx, lsm6dsr_hpm_g_t *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_Auxiliary_interface__________________________________________;
+#endif
 /**
  * @brief  On auxiliary interface connect/disconnect SDO and OCS
  *         internal pull-up.[set]
@@ -2655,6 +2689,9 @@ i32 lsm6dsr_aux_xl_full_scale_get(stmdev_ctx_t *ctx, lsm6dsr_fs_xl_ois_t *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_ main_serial_interface_______________________________________;
+#endif
 /**
  * @brief  Connect/Disconnect SDO/SA0 internal pull-up.[set]
  *
@@ -2868,6 +2905,9 @@ i32 lsm6dsr_i3c_disable_get(stmdev_ctx_t *ctx, lsm6dsr_i3c_disable_t *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_interrupt_pins______________________________________________;
+#endif
 /**
  * @brief   Select the signal that need to route on int1 pad[set]
  *
@@ -3240,6 +3280,9 @@ i32 lsm6dsr_int_notification_get(stmdev_ctx_t *ctx, lsm6dsr_lir_t *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_Wake_Up_event______________________________________________;
+#endif
 /**
  * @brief  Weight of 1 LSB of wakeup threshold.[set]
  *         0: 1 LSB =FS_XL  /  64
@@ -3395,6 +3438,9 @@ i32 lsm6dsr_wkup_dur_get(stmdev_ctx_t *ctx, u8 *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_ Activity_Inactivity_detection_______________________________;
+#endif
 /**
  * @brief  Enables gyroscope Sleep mode.[set]
  *
@@ -3554,6 +3600,9 @@ i32 lsm6dsr_act_sleep_dur_get(stmdev_ctx_t *ctx, u8 *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_tap_generator________________________________________________;
+#endif 
 /**
  * @brief  Enable Z direction in tap recognition.[set]
  *
@@ -3970,6 +4019,9 @@ i32 lsm6dsr_tap_mode_get(stmdev_ctx_t *ctx, lsm6dsr_single_double_tap_t *val) {
  *
  */
 
+#if 0 
+u8 _______Six_position_detection__6D_4D________________________________________;
+#endif 
 /**
  * @brief  Threshold for 4D/6D function.[set]
  *
@@ -4061,6 +4113,9 @@ i32 lsm6dsr_4d_mode_get(stmdev_ctx_t *ctx, u8 *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_free_fall____________________________________________________;
+#endif 
 /**
  * @brief  Free fall threshold setting.[set]
  *
@@ -4167,6 +4222,9 @@ i32 lsm6dsr_ff_dur_get(stmdev_ctx_t *ctx, u8 *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_fifo_________________________________________________________;
+#endif 
 /**
  * @brief  FIFO watermark level selection.[set]
  *
@@ -4273,9 +4331,7 @@ i32 lsm6dsr_compression_algo_init_get(stmdev_ctx_t *ctx, u8 *val) {
 i32 lsm6dsr_compression_algo_set(stmdev_ctx_t *ctx, lsm6dsr_uncoptr_rate_t val) {
     lsm6dsr_fifo_ctrl2_t    fifo_ctrl2;
     lsm6dsr_emb_func_en_b_t emb_func_en_b;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_EN_B, (u8 *)&emb_func_en_b, 1);
     }
@@ -4686,9 +4742,7 @@ i32 lsm6dsr_fifo_timestamp_decimation_get(stmdev_ctx_t *ctx, lsm6dsr_odr_ts_batc
  */
 i32 lsm6dsr_fifo_cnt_event_batch_set(stmdev_ctx_t *ctx, lsm6dsr_trig_counter_bdr_t val) {
     lsm6dsr_counter_bdr_reg1_t counter_bdr_reg1;
-    i32                    ret;
-
-    ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
     if (ret == 0) {
         counter_bdr_reg1.trig_counter_bdr = (u8)val;
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
@@ -4708,9 +4762,7 @@ i32 lsm6dsr_fifo_cnt_event_batch_set(stmdev_ctx_t *ctx, lsm6dsr_trig_counter_bdr
  */
 i32 lsm6dsr_fifo_cnt_event_batch_get(stmdev_ctx_t *ctx, lsm6dsr_trig_counter_bdr_t *val) {
     lsm6dsr_counter_bdr_reg1_t counter_bdr_reg1;
-    i32                    ret;
-
-    ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
     switch (counter_bdr_reg1.trig_counter_bdr) {
     case LSM6DSR_XL_BATCH_EVENT: *val = LSM6DSR_XL_BATCH_EVENT; break;
     case LSM6DSR_GYRO_BATCH_EVENT: *val = LSM6DSR_GYRO_BATCH_EVENT; break;
@@ -4730,9 +4782,7 @@ i32 lsm6dsr_fifo_cnt_event_batch_get(stmdev_ctx_t *ctx, lsm6dsr_trig_counter_bdr
  */
 i32 lsm6dsr_rst_batch_counter_set(stmdev_ctx_t *ctx, u8 val) {
     lsm6dsr_counter_bdr_reg1_t counter_bdr_reg1;
-    i32                    ret;
-
-    ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
     if (ret == 0) {
         counter_bdr_reg1.rst_counter_bdr = (u8)val;
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
@@ -4770,9 +4820,7 @@ i32 lsm6dsr_rst_batch_counter_get(stmdev_ctx_t *ctx, u8 *val) {
 i32 lsm6dsr_batch_counter_threshold_set(stmdev_ctx_t *ctx, u16 val) {
     lsm6dsr_counter_bdr_reg2_t counter_bdr_reg1;
     lsm6dsr_counter_bdr_reg2_t counter_bdr_reg2;
-    i32                    ret;
-
-    ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
     if (ret == 0) {
         counter_bdr_reg1.cnt_bdr_th = (u8)((0x0700U & val) >> 8);
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
@@ -4796,9 +4844,7 @@ i32 lsm6dsr_batch_counter_threshold_set(stmdev_ctx_t *ctx, u16 val) {
 i32 lsm6dsr_batch_counter_threshold_get(stmdev_ctx_t *ctx, u16 *val) {
     lsm6dsr_counter_bdr_reg1_t counter_bdr_reg1;
     lsm6dsr_counter_bdr_reg2_t counter_bdr_reg2;
-    i32                    ret;
-
-    ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
+    i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG1, (u8 *)&counter_bdr_reg1, 1);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_COUNTER_BDR_REG2, (u8 *)&counter_bdr_reg2, 1);
     }
@@ -5179,6 +5225,9 @@ i32 lsm6dsr_sh_batch_slave_3_get(stmdev_ctx_t *ctx, u8 *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_DEN_functionality____________________________________________;
+#endif 
 /**
  * @brief  DEN functionality marking mode.[set]
  *
@@ -5405,6 +5454,9 @@ i32 lsm6dsr_den_mark_axis_z_get(stmdev_ctx_t *ctx, u8 *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_Pedometer____________________________________________________;
+#endif 
 /**
  * @brief  Enable pedometer algorithm.[set]
  *
@@ -5415,9 +5467,7 @@ i32 lsm6dsr_den_mark_axis_z_get(stmdev_ctx_t *ctx, u8 *val) {
  */
 i32 lsm6dsr_pedo_sens_set(stmdev_ctx_t *ctx, u8 val) {
     lsm6dsr_emb_func_en_a_t emb_func_en_a;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_EN_A, (u8 *)&emb_func_en_a, 1);
     }
@@ -5441,9 +5491,7 @@ i32 lsm6dsr_pedo_sens_set(stmdev_ctx_t *ctx, u8 val) {
  */
 i32 lsm6dsr_pedo_sens_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_emb_func_en_a_t emb_func_en_a;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret  = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_EN_A, (u8 *)&emb_func_en_a, 1);
         *val = emb_func_en_a.pedo_en;
@@ -5469,9 +5517,7 @@ i32 lsm6dsr_pedo_mode_set(stmdev_ctx_t *ctx, lsm6dsr_pedo_mode_t val) {
     lsm6dsr_adv_pedo_t      adv_pedo;
     lsm6dsr_emb_func_en_b_t emb_func_en_b;
     lsm6dsr_pedo_cmd_reg_t  pedo_cmd_reg;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_ADV_PEDO, (u8 *)&adv_pedo, 1);
     }
@@ -5732,6 +5778,9 @@ i32 lsm6dsr_pedo_int_mode_get(stmdev_ctx_t *ctx, lsm6dsr_carry_count_en_t *val) 
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_significant_motion____________________________________________________;
+#endif 
 /**
  * @brief  Enable significant motion detection function.[set]
  *
@@ -5742,9 +5791,7 @@ i32 lsm6dsr_pedo_int_mode_get(stmdev_ctx_t *ctx, lsm6dsr_carry_count_en_t *val) 
  */
 i32 lsm6dsr_motion_sens_set(stmdev_ctx_t *ctx, u8 val) {
     lsm6dsr_emb_func_en_a_t emb_func_en_a;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_EN_A, (u8 *)&emb_func_en_a, 1);
     }
@@ -5768,9 +5815,7 @@ i32 lsm6dsr_motion_sens_set(stmdev_ctx_t *ctx, u8 val) {
  */
 i32 lsm6dsr_motion_sens_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_emb_func_en_a_t emb_func_en_a;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_EN_A, (u8 *)&emb_func_en_a, 1);
     }
@@ -5815,6 +5860,9 @@ i32 lsm6dsr_motion_flag_data_ready_get(stmdev_ctx_t *ctx, u8 *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_tilt_detection____________________________________________________;
+#endif 
 /**
  * @brief  Enable tilt calculation.[set]
  *
@@ -5825,9 +5873,7 @@ i32 lsm6dsr_motion_flag_data_ready_get(stmdev_ctx_t *ctx, u8 *val) {
  */
 i32 lsm6dsr_tilt_sens_set(stmdev_ctx_t *ctx, u8 val) {
     lsm6dsr_emb_func_en_a_t emb_func_en_a;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_EN_A, (u8 *)&emb_func_en_a, 1);
     }
@@ -5851,9 +5897,7 @@ i32 lsm6dsr_tilt_sens_set(stmdev_ctx_t *ctx, u8 val) {
  */
 i32 lsm6dsr_tilt_sens_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_emb_func_en_a_t emb_func_en_a;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_EMB_FUNC_EN_A, (u8 *)&emb_func_en_a, 1);
     }
@@ -5898,6 +5942,10 @@ i32 lsm6dsr_tilt_flag_data_ready_get(stmdev_ctx_t *ctx, u8 *val) {
  *
  */
 
+
+#if 0 
+u8 _______LSM6DSR_magnetometer_sensor__________________________________________;
+#endif 
 /**
  * @brief  External magnetometer sensitivity value register.[set]
  *
@@ -5907,12 +5955,10 @@ i32 lsm6dsr_tilt_flag_data_ready_get(stmdev_ctx_t *ctx, u8 *val) {
  *
  */
 i32 lsm6dsr_mag_sensitivity_set(stmdev_ctx_t *ctx, u16 val) {
-    u8 buff[2];
-    i32 ret;
-
+    u8 buff[2]; 
     buff[1] = (u8)(val / 256U);
     buff[0] = (u8)(val - (buff[1] * 256U));
-    ret     = lsm6dsr_ln_pg_write_byte(ctx, LSM6DSR_MAG_SENSITIVITY_L, &buff[0]);
+    i32 ret = lsm6dsr_ln_pg_write_byte(ctx, LSM6DSR_MAG_SENSITIVITY_L, &buff[0]);
     if (ret == 0) {
         ret = lsm6dsr_ln_pg_write_byte(ctx, LSM6DSR_MAG_SENSITIVITY_H, &buff[1]);
     }
@@ -5947,18 +5993,15 @@ i32 lsm6dsr_mag_sensitivity_get(stmdev_ctx_t *ctx, u16 *val) {
  *
  */
 i32 lsm6dsr_mag_offset_set(stmdev_ctx_t *ctx, i16 *val) {
-    u8 buff[6];
-    i32 ret;
-
-    u8 i;
+    u8 buff[6];  
     buff[1] = (u8)((u16)val[0] / 256U);
     buff[0] = (u8)((u16)val[0] - (buff[1] * 256U));
     buff[3] = (u8)((u16)val[1] / 256U);
     buff[2] = (u8)((u16)val[1] - (buff[3] * 256U));
     buff[5] = (u8)((u16)val[2] / 256U);
     buff[4] = (u8)((u16)val[2] - (buff[5] * 256U));
-    i       = 0x00U;
-    ret     = lsm6dsr_ln_pg_write_byte(ctx, LSM6DSR_MAG_OFFX_L, &buff[i]);
+    u8 i    = 0x00U;
+    i32 ret = lsm6dsr_ln_pg_write_byte(ctx, LSM6DSR_MAG_OFFX_L, &buff[i]);
     if (ret == 0) {
         i++;
         ret = lsm6dsr_ln_pg_write_byte(ctx, LSM6DSR_MAG_OFFX_H, &buff[i]);
@@ -5991,12 +6034,8 @@ i32 lsm6dsr_mag_offset_set(stmdev_ctx_t *ctx, i16 *val) {
  *
  */
 i32 lsm6dsr_mag_offset_get(stmdev_ctx_t *ctx, i16 *val) {
-    u8 buff[6];
-    i32 ret;
-
-    u8 i;
-    i   = 0x00U;
-    ret = lsm6dsr_ln_pg_read_byte(ctx, LSM6DSR_MAG_OFFX_L, &buff[i]);
+    u8 buff[6],  i = 0x00U;
+    i32 ret = lsm6dsr_ln_pg_read_byte(ctx, LSM6DSR_MAG_OFFX_L, &buff[i]);
     if (ret == 0) {
         i++;
         ret = lsm6dsr_ln_pg_read_byte(ctx, LSM6DSR_MAG_OFFX_H, &buff[i]);
@@ -6339,7 +6378,9 @@ i32 lsm6dsr_mag_x_orient_get(stmdev_ctx_t *ctx, lsm6dsr_mag_x_axis_t *val) {
  * @{
  *
  */
-
+#if 0 
+u8 _______LSM6DSR_finite_state_machine_______________________________________________;
+#endif 
 /**
  * @brief  Interrupt status bit for FSM long counter timeout interrupt
  *         event.[get]
@@ -6424,9 +6465,7 @@ i32 lsm6dsr_emb_fsm_en_get(stmdev_ctx_t *ctx, u8 *val) {
  */
 i32 lsm6dsr_fsm_enable_set(stmdev_ctx_t *ctx, lsm6dsr_emb_fsm_enable_t *val) {
     lsm6dsr_emb_func_en_b_t emb_func_en_b;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) {
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_FSM_ENABLE_A, (u8 *)&val->fsm_enable_a, 1);
     }
@@ -6832,6 +6871,9 @@ i32 lsm6dsr_fsm_start_address_get(stmdev_ctx_t *ctx, u16 *val) {
  *
  */
 
+#if 0 
+u8 _______LSM6DSR_Sensor_hub___________________________________________________;
+#endif 
 /**
  * @brief  Sensor hub output registers.[get]
  *
@@ -6981,9 +7023,7 @@ i32 lsm6dsr_sh_pin_mode_set(stmdev_ctx_t *ctx, lsm6dsr_shub_pu_en_t val) {
  */
 i32 lsm6dsr_sh_pin_mode_get(stmdev_ctx_t *ctx, lsm6dsr_shub_pu_en_t *val) {
     lsm6dsr_master_config_t master_config;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&master_config, 1);
     }
@@ -7008,9 +7048,7 @@ i32 lsm6dsr_sh_pin_mode_get(stmdev_ctx_t *ctx, lsm6dsr_shub_pu_en_t *val) {
  */
 i32 lsm6dsr_sh_pass_through_set(stmdev_ctx_t *ctx, u8 val) {
     lsm6dsr_master_config_t master_config;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&master_config, 1);
     }
@@ -7034,9 +7072,7 @@ i32 lsm6dsr_sh_pass_through_set(stmdev_ctx_t *ctx, u8 val) {
  */
 i32 lsm6dsr_sh_pass_through_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_master_config_t master_config;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&master_config, 1);
     }
@@ -7057,9 +7093,7 @@ i32 lsm6dsr_sh_pass_through_get(stmdev_ctx_t *ctx, u8 *val) {
  */
 i32 lsm6dsr_sh_syncro_mode_set(stmdev_ctx_t *ctx, lsm6dsr_start_config_t val) {
     lsm6dsr_master_config_t master_config;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&master_config, 1);
     }
@@ -7083,9 +7117,7 @@ i32 lsm6dsr_sh_syncro_mode_set(stmdev_ctx_t *ctx, lsm6dsr_start_config_t val) {
  */
 i32 lsm6dsr_sh_syncro_mode_get(stmdev_ctx_t *ctx, lsm6dsr_start_config_t *val) {
     lsm6dsr_master_config_t master_config;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&master_config, 1);
     }
@@ -7111,9 +7143,7 @@ i32 lsm6dsr_sh_syncro_mode_get(stmdev_ctx_t *ctx, lsm6dsr_start_config_t *val) {
  */
 i32 lsm6dsr_sh_write_mode_set(stmdev_ctx_t *ctx, lsm6dsr_write_once_t val) {
     lsm6dsr_master_config_t master_config;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&master_config, 1);
     }
@@ -7138,9 +7168,7 @@ i32 lsm6dsr_sh_write_mode_set(stmdev_ctx_t *ctx, lsm6dsr_write_once_t val) {
  */
 i32 lsm6dsr_sh_write_mode_get(stmdev_ctx_t *ctx, lsm6dsr_write_once_t *val) {
     lsm6dsr_master_config_t master_config;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&master_config, 1);
     }
@@ -7164,9 +7192,7 @@ i32 lsm6dsr_sh_write_mode_get(stmdev_ctx_t *ctx, lsm6dsr_write_once_t *val) {
  */
 i32 lsm6dsr_sh_reset_set(stmdev_ctx_t *ctx) {
     lsm6dsr_master_config_t master_config;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
     if (ret == 0) {
         ret = lsm6dsr_read_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&master_config, 1);
     }
@@ -7194,9 +7220,7 @@ i32 lsm6dsr_sh_reset_set(stmdev_ctx_t *ctx) {
  */
 i32 lsm6dsr_sh_reset_get(stmdev_ctx_t *ctx, u8 *val) {
     lsm6dsr_master_config_t master_config;
-    i32                 ret;
-
-    ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
+    i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_SENSOR_HUB_BANK);
     if (ret == 0) {
         ret  = lsm6dsr_read_reg(ctx, LSM6DSR_MASTER_CONFIG, (u8 *)&master_config, 1);
         *val = master_config.rst_master_regs;
@@ -7484,7 +7508,9 @@ i32 lsm6dsr_sh_status_get(stmdev_ctx_t *ctx, lsm6dsr_status_master_t *val) {
  * @{
  *
  */
-
+#if 0 
+u8 _______LSM6DSR_Sensors_for_Smart_Mobile_Devices_____________________________;
+#endif 
 /**
  * @brief  Sensor synchronization time frame resolution[set]
  *
