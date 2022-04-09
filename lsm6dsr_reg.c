@@ -4946,29 +4946,29 @@ i32 lsm6dsr_fifo_sensor_tag_get(stmdev_ctx_t *ctx, lsm6dsr_fifo_tag_t *val) {
     lsm6dsr_fifo_data_out_tag_t fifo_data_out_tag;
     i32 ret = lsm6dsr_read_reg(ctx, LSM6DSR_FIFO_DATA_OUT_TAG, (u8 *)&fifo_data_out_tag, 1);
     switch (fifo_data_out_tag.tag_sensor) {
-    case LSM6DSR_GYRO_NC_TAG: *val = LSM6DSR_GYRO_NC_TAG; break;
-    case LSM6DSR_XL_NC_TAG: *val = LSM6DSR_XL_NC_TAG; break;
-    case LSM6DSR_TEMPERATURE_TAG: *val = LSM6DSR_TEMPERATURE_TAG; break;
-    case LSM6DSR_TIMESTAMP_TAG: *val = LSM6DSR_TIMESTAMP_TAG; break;
-    case LSM6DSR_CFG_CHANGE_TAG: *val = LSM6DSR_CFG_CHANGE_TAG; break;
-    case LSM6DSR_XL_NC_T_2_TAG: *val = LSM6DSR_XL_NC_T_2_TAG; break;
-    case LSM6DSR_XL_NC_T_1_TAG: *val = LSM6DSR_XL_NC_T_1_TAG; break;
-    case LSM6DSR_XL_2XC_TAG: *val = LSM6DSR_XL_2XC_TAG; break;
-    case LSM6DSR_XL_3XC_TAG: *val = LSM6DSR_XL_3XC_TAG; break;
-    case LSM6DSR_GYRO_NC_T_2_TAG: *val = LSM6DSR_GYRO_NC_T_2_TAG; break;
-    case LSM6DSR_GYRO_NC_T_1_TAG: *val = LSM6DSR_GYRO_NC_T_1_TAG; break;
-    case LSM6DSR_GYRO_2XC_TAG: *val = LSM6DSR_GYRO_2XC_TAG; break;
-    case LSM6DSR_GYRO_3XC_TAG: *val = LSM6DSR_GYRO_3XC_TAG; break;
+    case LSM6DSR_GYRO_NC_TAG:          *val = LSM6DSR_GYRO_NC_TAG;        break;
+    case LSM6DSR_XL_NC_TAG:            *val = LSM6DSR_XL_NC_TAG;          break;
+    case LSM6DSR_TEMPERATURE_TAG:      *val = LSM6DSR_TEMPERATURE_TAG;    break;
+    case LSM6DSR_TIMESTAMP_TAG:        *val = LSM6DSR_TIMESTAMP_TAG;      break;
+    case LSM6DSR_CFG_CHANGE_TAG:       *val = LSM6DSR_CFG_CHANGE_TAG;     break;
+    case LSM6DSR_XL_NC_T_2_TAG:        *val = LSM6DSR_XL_NC_T_2_TAG;      break;
+    case LSM6DSR_XL_NC_T_1_TAG:        *val = LSM6DSR_XL_NC_T_1_TAG;      break;
+    case LSM6DSR_XL_2XC_TAG:           *val = LSM6DSR_XL_2XC_TAG;         break;
+    case LSM6DSR_XL_3XC_TAG:           *val = LSM6DSR_XL_3XC_TAG;         break;
+    case LSM6DSR_GYRO_NC_T_2_TAG:      *val = LSM6DSR_GYRO_NC_T_2_TAG;    break;
+    case LSM6DSR_GYRO_NC_T_1_TAG:      *val = LSM6DSR_GYRO_NC_T_1_TAG;    break;
+    case LSM6DSR_GYRO_2XC_TAG:         *val = LSM6DSR_GYRO_2XC_TAG;       break;
+    case LSM6DSR_GYRO_3XC_TAG:         *val = LSM6DSR_GYRO_3XC_TAG;       break;
     case LSM6DSR_SENSORHUB_SLAVE0_TAG: *val = LSM6DSR_SENSORHUB_SLAVE0_TAG; break;
     case LSM6DSR_SENSORHUB_SLAVE1_TAG: *val = LSM6DSR_SENSORHUB_SLAVE1_TAG; break;
     case LSM6DSR_SENSORHUB_SLAVE2_TAG: *val = LSM6DSR_SENSORHUB_SLAVE2_TAG; break;
     case LSM6DSR_SENSORHUB_SLAVE3_TAG: *val = LSM6DSR_SENSORHUB_SLAVE3_TAG; break;
-    case LSM6DSR_STEP_CPUNTER_TAG: *val = LSM6DSR_STEP_CPUNTER_TAG; break;
-    case LSM6DSR_GAME_ROTATION_TAG: *val = LSM6DSR_GAME_ROTATION_TAG; break;
+    case LSM6DSR_STEP_CPUNTER_TAG:    *val = LSM6DSR_STEP_CPUNTER_TAG;    break;
+    case LSM6DSR_GAME_ROTATION_TAG:   *val = LSM6DSR_GAME_ROTATION_TAG;   break;
     case LSM6DSR_GEOMAG_ROTATION_TAG: *val = LSM6DSR_GEOMAG_ROTATION_TAG; break;
-    case LSM6DSR_ROTATION_TAG: *val = LSM6DSR_ROTATION_TAG; break;
-    case LSM6DSR_SENSORHUB_NACK_TAG: *val = LSM6DSR_SENSORHUB_NACK_TAG; break;
-    default: *val = LSM6DSR_SENSORHUB_NACK_TAG; break;
+    case LSM6DSR_ROTATION_TAG:        *val = LSM6DSR_ROTATION_TAG;        break;
+    case LSM6DSR_SENSORHUB_NACK_TAG:  *val = LSM6DSR_SENSORHUB_NACK_TAG;  break;
+    default:                          *val = LSM6DSR_SENSORHUB_NACK_TAG;  break;
     }
     return ret;
 }
