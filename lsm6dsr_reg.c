@@ -3016,12 +3016,9 @@ i32 lsm6dsr_pin_int2_route_set(stmdev_ctx_t *ctx, lsm6dsr_pin_int2_route_t *val)
     i32 ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_EMBEDDED_FUNC_BANK);
     if (ret == 0) 
         ret = lsm6dsr_write_reg(ctx, LSM6DSR_EMB_FUNC_INT2, (u8 *)&efi2, 1); 
-    if (ret == 0) 
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_FSM_INT2_A, (u8 *)&fsmA, 1); 
-    if (ret == 0) 
-        ret = lsm6dsr_write_reg(ctx, LSM6DSR_FSM_INT2_B, (u8 *)&fsmB, 1); 
-    if (ret == 0) 
-        ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_USER_BANK); 
+    if (!ret) ret = lsm6dsr_write_reg(ctx, LSM6DSR_FSM_INT2_A, (u8 *)&fsmA, 1); 
+    if (!ret) ret = lsm6dsr_write_reg(ctx, LSM6DSR_FSM_INT2_B, (u8 *)&fsmB, 1); 
+    if (!ret) ret = lsm6dsr_mem_bank_set(ctx, LSM6DSR_USER_BANK); 
     if (ret == 0) {
         if ((efi2.int2_step_detector | efi2.int2_tilt | efi2.int2_sig_mot | 
            efi2.int2_fsm_lc | fsmA.int2_fsm1 | fsmA.int2_fsm2 | fsmA.int2_fsm3 |
