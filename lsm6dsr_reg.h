@@ -31,7 +31,8 @@ extern "C" {
 #include <stddef.h>
 #include <stdint.h>
 
-#include "../../include/v_config.h"     // #include "v_config.h"
+// #include "../../include/v_config.h"     
+#include "v_config.h"
 
 /** @addtogroup LSM6DSR
  * @{
