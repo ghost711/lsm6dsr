@@ -126,7 +126,7 @@ float_t lsm6dsr_from_lsb_to_nsec(i32 lsb) {
  */
 
 /**
- * @defgroup   LSM9DS1_Data_generation
+ * @defgroup   LSM6DSR_Data_generation
  * @brief      This section groups all the functions concerning data
  *             generation
  * @{
