@@ -3343,7 +3343,7 @@ i32 lsm6dsr_fifo_ovr_flag_get(stmdev_ctx_t *ctx, u8 *val);
 
 i32 lsm6dsr_fifo_wtm_flag_get(stmdev_ctx_t *ctx, u8 *val);
 
-typedef enum {
+typedef enum {   /** NC == Not Compressed. */
     LSM6DSR_GYRO_NC_TAG = 1,
     LSM6DSR_XL_NC_TAG,
     LSM6DSR_TEMPERATURE_TAG,
@@ -3357,7 +3357,7 @@ typedef enum {
     LSM6DSR_GYRO_NC_T_1_TAG,
     LSM6DSR_GYRO_2XC_TAG,
     LSM6DSR_GYRO_3XC_TAG,
-    LSM6DSR_SENSORHUB_SLAVE0_TAG,
+    LSM6DSR_SENSORHUB_SLAVE0_TAG,   // 14 == 0x0E
     LSM6DSR_SENSORHUB_SLAVE1_TAG,
     LSM6DSR_SENSORHUB_SLAVE2_TAG,
     LSM6DSR_SENSORHUB_SLAVE3_TAG,
