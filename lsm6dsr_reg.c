@@ -36,7 +36,7 @@
  *              MANDATORY: return 0 -> no Error.
  * @{
  *
- */
+ */ 
 
 /**
  * @brief  Read generic device register
@@ -48,12 +48,12 @@
  * @retval       interface status (MANDATORY: return 0 -> no Error)
  *
  */
-i32 lsm6dsr_read_reg(stmdev_ctx_t *ctx, u8 reg, u8 *data, u16 len) {
+i32 __weak lsm6dsr_read_reg(stmdev_ctx_t *ctx, u8 reg, u8 *data, u16 len) {
     i32 ret = ctx->read_reg(ctx->handle, reg, data, len);
     return ret;
 }
 
-/**
+/** 
  * @brief  Write generic device register
  *
  * @param  ctx   read / write interface definitions(ptr)
@@ -63,9 +63,9 @@ i32 lsm6dsr_read_reg(stmdev_ctx_t *ctx, u8 reg, u8 *data, u16 len) {
  * @retval       interface status (MANDATORY: return 0 -> no Error)
  *
  */
-i32 lsm6dsr_write_reg(stmdev_ctx_t *ctx, u8 reg, u8 *data, u16 len) {
+i32 __weak lsm6dsr_write_reg(stmdev_ctx_t *ctx, u8 reg, u8 *data, u16 len) {
     i32 ret = ctx->write_reg(ctx->handle, reg, data, len);
-    return ret;
+    return ret; 
 }
 
 /**

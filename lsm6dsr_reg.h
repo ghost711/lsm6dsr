@@ -72,25 +72,25 @@ extern "C" {
 #ifndef MEMS_SHARED_TYPES
     #define MEMS_SHARED_TYPES 
     typedef struct {
-            #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
-        u8 bit0 : 1;
-        u8 bit1 : 1;
-        u8 bit2 : 1;
-        u8 bit3 : 1;
-        u8 bit4 : 1;
-        u8 bit5 : 1;
-        u8 bit6 : 1;
-        u8 bit7 : 1;
-            #elif DRV_BYTE_ORDER == DRV_BIG_ENDIAN
-        u8 bit7 : 1;
-        u8 bit6 : 1;
-        u8 bit5 : 1;
-        u8 bit4 : 1;
-        u8 bit3 : 1;
-        u8 bit2 : 1;
-        u8 bit1 : 1;
-        u8 bit0 : 1;
-            #endif /* DRV_BYTE_ORDER */
+        #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
+            u8 bit0 : 1;
+            u8 bit1 : 1;
+            u8 bit2 : 1;
+            u8 bit3 : 1;
+            u8 bit4 : 1;
+            u8 bit5 : 1;
+            u8 bit6 : 1;
+            u8 bit7 : 1;
+        #elif DRV_BYTE_ORDER == DRV_BIG_ENDIAN
+            u8 bit7 : 1;
+            u8 bit6 : 1;
+            u8 bit5 : 1;
+            u8 bit4 : 1;
+            u8 bit3 : 1;
+            u8 bit2 : 1;
+            u8 bit1 : 1;
+            u8 bit0 : 1;
+        #endif /* DRV_BYTE_ORDER */
     } bitwise_t;
 
     #define PROPERTY_DISABLE (0U)
@@ -105,11 +105,22 @@ extern "C" {
      */ 
     typedef i32 (*stmdev_write_ptr)(void *, u8, const u8 *, u16);
     typedef i32 (*stmdev_read_ptr)(void *, u8, u8 *, u16);
+    typedef void (*stmdev_mdelay_ptr)(u32 millisec);
+
+    // typedef struct {
+    //     /** Component mandatory fields **/
+    //     stmdev_write_ptr write_reg;
+    //     stmdev_read_ptr  read_reg;
+    //     /** Customizable optional pointer **/
+    //     void *handle;
+    // } stmdev_ctx_t;
 
     typedef struct {
         /** Component mandatory fields **/
-        stmdev_write_ptr write_reg;
-        stmdev_read_ptr  read_reg;
+        stmdev_write_ptr  write_reg;
+        stmdev_read_ptr   read_reg;
+        /** Component optional fields **/
+        stmdev_mdelay_ptr mdelay;
         /** Customizable optional pointer **/
         void *handle;
     } stmdev_ctx_t;
@@ -117,8 +128,7 @@ extern "C" {
     /**
      * @}
      *
-     */
-
+     */  
 #endif /* MEMS_SHARED_TYPES */
 
 #ifndef MEMS_UCF_SHARED_TYPES
@@ -2625,6 +2635,18 @@ typedef union {
 /**
  * @}
  *
+ */
+
+#ifndef __weak
+#define __weak __attribute__((weak))
+#endif /* __weak */
+/*
+ * These are the basic platform dependent I/O routines to read
+ * and write device registers connected on a standard bus.
+ * The driver keeps offering a default implementation based on function
+ * pointers to read/write routines for backward compatibility.
+ * The __weak directive allows the final application to overwrite
+ * them with a custom implementation.
  */
 
 i32 lsm6dsr_read_reg(stmdev_ctx_t *ctx, u8 reg, u8 *data, u16 len);
